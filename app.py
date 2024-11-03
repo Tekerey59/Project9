@@ -19,19 +19,19 @@ def account_edit_static():
   return render_template('acc_ed', err = False)
 
 @app.route('/account/delete/')
-def account_edit_static():
+def account_delete():
   # COMING SOON
-  return render_template()
+  return render_template('')
 
 @app.route('/login/')
 def login():
   # COMING SOON
-  return render_template()
+  return render_template('')
 
 @app.route('/register/')
 def register():
   # COMING SOON
-  return render_template()
+  return render_template('')
 
 @app.route('/<id>/')
 def chem(id):
@@ -71,7 +71,7 @@ def chem_edite_end():
     return render_template('chem_ed', id, err = True)
   
 @app.route('/<id>/delete/', methods=['POST'])
-def account_delete_conf():
+def chem_delete_conf():
   idt = True
   if idt:
     return render_template('testpage.html')
