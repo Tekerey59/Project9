@@ -1,0 +1,20 @@
+{% macro call_notification(class, title, text) %}
+<div class="tool-notification">
+    <div class="tool-notification-container tool-notification-{{ class }}">
+        <h3 class="tool-notification-h tool-notification-h-{{ class }}">{{ title }}</h3>
+        <p class="tool-notification-content">{{ text }}</p>
+    </div>
+</div>
+{% endmacro %}
+{% macro cards(lst) %}
+<div class="tool-cards">
+    {% for item in lst %}
+    <a href="/{{ item.id }}/" class="tool-cards-item">
+        <img src="{{ item.struct }}" alt="" class="tool-cards-item-img">
+        <h2 class="tool-cards-item-h2">{{ item.name }}</h2>
+        <h3 class="tool-cards-item-h3">{{ item.iupac }}</h3>
+    </a>
+    {% endfor %}
+</div>
+<script src="{{ url_for('static', filename='js/cards.js') }}"></script>
+{% endmacro %}

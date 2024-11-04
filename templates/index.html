@@ -1,3 +1,8 @@
+{% from 'tools.html' import cards, call_notification %}
 {% extends 'layout.html' %}
 {% block content %}
+{{ cards(cards_lst) }}
+{% if notification != None %}
+{{ call_notification(notification.class, notification.title, notification.text) }}
+{% endif %}
 {% endblock %}
