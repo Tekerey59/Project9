@@ -1,9 +1,9 @@
-{% from 'tools.html' import call_logreg_notification %}
+{% from 'tools.html' import call_log_reg_notification %}
 {% extends 'log_reg_layout.html' %}
 {% block title %}Вход{% endblock %}
 {% block content %}
 {% if notification is defined %}
-{{ call_logreg_notification(notification.class, notification.title, notification.text) }}
+{{ call_log_reg_notification(notification.class, notification.title, notification.text) }}
 {% endif %}
 <label for="name" class="layout-main-form-label">Ваше имя:</label>
 <input name="name" type="text" placeholder="Иванов Иван Иванович" class="layout-main-form-input">

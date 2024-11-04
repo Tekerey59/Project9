@@ -5,7 +5,7 @@ import sqlite3 as sq
 import time
 app = Flask('Suite')
 
-with sq.connect('base.db') as con:
+with sq.connect('base.db', check_same_thread=False) as con:
   cur = con.cursor()
 
                                                       #Обработка GET запросов
@@ -31,7 +31,7 @@ with sq.connect('base.db') as con:
   @app.route('/login/')
   def get_login():
     # COMING SOON
-    return render_template('')
+    return render_template('login.html')
 
   @app.route('/register/')
   def get_register():
@@ -41,7 +41,7 @@ with sq.connect('base.db') as con:
   @app.route('/<id>/')
   def get_chem(id):
     # COMING SOON
-    return render_template('chem', id)
+    return render_template('index.html', id = id)
 
   @app.route('/<id>/edit/')
   def get_chem_edit(id):
@@ -86,9 +86,9 @@ with sq.connect('base.db') as con:
     # COMING SOON, For example
     e = True
     if e:
-      return render_template('chem.html', id)
+      return render_template('chem.html')
     else:
-      return render_template('chem_ed', id, err = True)
+      return render_template('chem_ed', err = True)
 
   @app.route('/<id>/delete/', methods=['POST'])
   def post_chem_delete():
@@ -100,28 +100,29 @@ with sq.connect('base.db') as con:
     
   @app.route('/register/', methods=['POST'])
   def post_register(): 
-    name = request.form['name']
-    email = request.form['email']
-    password_first = request.form['password_first']
-    password_second = request.form['password_second']
-    if password_first == password_second:
-      created_datatime = time.ctime(time.time())
-      updated_datatime = created_datatime
+    name1 = request.form['name']
+    email1 = request.form['email']
+    password_first1 = request.form['password_first']
+    password_second1 = request.form['password_second']
+    if password_first1 == password_second1:
+      created_datatime1 = time.time()
+      updated_datatime1 = created_datatime1
       try:
-        cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password_first}, {created_datatime}, {updated_datatime})""")
-        return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Регистрация выполнена!"})
+        cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{password_first1}', '{created_datatime1}', '{updated_datatime1}')""")
+        cur.connection.commit()
+        return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Регистрация выполнена!"})      
       except Exception as err:
-        return render_template('register.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка регистрации, попробуйте ещё раз"})
+        return render_template('register.html', notification = {"class":"error", "title":f"{err}", "text":"Ошибка регистрации, попробуйте ещё раз"})
     else:
       return render_template('register.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка регистрации, пароли не совпадают, попробуйте ещё раз"})
     
   @app.route('/login/', methods=['POST'])
   def post_login():
-    name = request.form['name']
-    password = request.form['password']
-    cur.execute(f"""SELECT password FROM users WHERE name == {name}""")
+    name1 = request.form['name']
+    password1 = request.form['password']
+    cur.execute(f"""SELECT password FROM users WHERE name == '{name1}'""")
     user_data = cur.fetchone()[0]
-    if password == user_data:
+    if password1 == user_data:
       return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Вы вошли в аккаунт!"})
     else:
       return render_template('login.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка входа, попробуйте ещё раз"})
