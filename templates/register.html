@@ -1,0 +1,19 @@
+{% from 'tools.html' import call_log_reg_notification %}
+{% extends 'log_reg_layout.html' %}
+{% block title %}Регистрация{% endblock %}
+{% block content %}
+{% if notification is defined %}
+{{ call_log_reg_notification(notification.class, notification.title, notification.text) }}
+{% endif %}
+<label class="layout-main-form-label">Ваше имя:</label>
+<input name="name" type="text" placeholder="Иванов Иван Иванович" class="layout-main-form-input">
+<label class="layout-main-form-label">Ваша электронная почта:</label>
+<input name="email" type="email" placeholder="exaple@email.com" class="layout-main-form-input">
+<label class="layout-main-form-label">Придумайте пароль:</label>
+<input name="password_first" type="password" placeholder="password" class="layout-main-form-input">
+<label class="layout-main-form-label">Подтвердите пароль:</label>
+<input name="password_second" type="password" placeholder="password" class="layout-main-form-input">
+{% endblock %}
+{% block after_content %}
+<a href="/login/" class="layout-main-form-label layout-main-form-other">Вход</a>
+{% endblock %}

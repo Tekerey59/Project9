@@ -105,7 +105,7 @@ with sq.connect('base.db') as con:
     password_first = request.form['password_first']
     password_second = request.form['password_second']
     if password_first == password_second:
-      created_datatime = time.ctime(time.time)
+      created_datatime = time.ctime(time.time())
       updated_datatime = created_datatime
       try:
         cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password_first}, {created_datatime}, {updated_datatime})""")

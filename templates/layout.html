@@ -33,15 +33,19 @@
             </button>
         </div>
         <div class="layout-header-nav">
-            <a href="/" class="layout-header-nav-link">ГЛАВНАЯ</a>
-            <a href="/usful-information/" class="layout-header-nav-link">ПОЛЕЗНАЯ ИНФОРМАЦИЯ</a>
-            <a href="/about/" class="layout-header-nav-link">О НАС</a>
+            <a href="/usful-information/" class="layout-header-nav-link">Полезная информация</a>
+            <a href="/about/" class="layout-header-nav-link">О нас</a>
+            {% if user is defined %}
             <a href="/like/" class="layout-header-nav-link">
                 <img src="{{ url_for('static', filename='images/heart.png') }}" alt="" class="layout-header-nav-link-like-img">
             </a>
             <a href="/account/" class="layout-header-nav-link">
                 <img src="{{ url_for('static', filename='images/profile-user.png') }}" alt="" class="layout-header-nav-link-account-img">
             </a>
+            {% else %}
+            <a href="/register/" class="layout-header-nav-link layout-header-nav-link-register">Регистрация</a>
+            <a href="/login/" class="layout-header-nav-link layout-header-nav-link-login">Вход</a>
+            {% endif %}
         </div>
     </header>
     <section class="layout-main">

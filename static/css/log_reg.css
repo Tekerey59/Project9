@@ -1,0 +1,118 @@
+:root {
+  --color-primary: #6848f7;
+  --color-primary-: #322861;
+  --color-sec: #fff;
+  --color-sec-: #212025;
+  --color-extra: #19181b;
+  --transition: 0.3s;
+  --transition-fast: 0.2s;
+}
+
+.root {
+  overflow-y: auto;
+  font-family: "Lato", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-sec-);
+}
+
+/* HELPERS */
+.empty-button,
+.empty-input {
+  background: transparent;
+  border: 0;
+}
+
+/* END HELPERS */
+
+.layout-main {
+  height: max-content;
+  width: 400px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-extra);
+  border-radius: 10px;
+}
+
+.layout-main-icon {
+  transition: var(--transition-fast);
+  height: 60px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1px 1px 0;
+  font-size: 40px;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: 10px;
+}
+.layout-main-icon:hover {
+  box-shadow: 0 0 10px var(--color-sec);
+  text-shadow: 0 0 10px var(--color-sec);
+  color: var(--color-sec);
+  border-color: var(--color-sec);
+}
+
+.layout-main-header {
+  margin: 20px 0 0 0;
+  color: var(--color-sec);
+}
+
+.layout-main-form {
+  height: max-content;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.layout-main-form-label {
+  margin: 10px 0 5px 0;
+  color: var(--color-sec);
+}
+.layout-main-form-input {
+  transition: var(--transition);
+  height: 40px;
+  width: 100%;
+  padding: 0 10px 0 10px;
+  color: var(--color-sec);
+  background: var(--color-sec-);
+  border: 0;
+  border-radius: 10px;
+}
+.layout-main-form-input:hover,
+.layout-main-form-input:focus {
+  box-shadow: 0 0 10px var(--color-sec);
+}
+.layout-main-form-input[type="password"] {
+  font: small-caption;
+}
+.layout-main-form-submit {
+  cursor: pointer;
+  transition: var(--transition);
+  height: 40px;
+  width: 100%;
+  margin: 20px 0 0 0;
+  background: linear-gradient(
+      0.25turn,
+      var(--color-primary),
+      var(--color-primary-)
+    )
+    20%;
+  border: 0;
+  border-radius: 10px;
+}
+.layout-main-form-submit:hover {
+  text-shadow: 0 0 10px var(--color-sec);
+  color: var(--color-sec);
+}
+.layout-main-form-other {
+  transition: var(--transition);
+  display: flex;
+  justify-content: center;
+}
+.layout-main-form-other:hover {
+  text-shadow: 0 0 10px var(--color-sec);
+}
