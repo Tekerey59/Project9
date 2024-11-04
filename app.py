@@ -29,12 +29,12 @@ with sq.connect('base.db') as con:
     return render_template('')
 
   @app.route('/login/')
-  def login():
+  def login_static():
     # COMING SOON
     return render_template('')
 
   @app.route('/register/')
-  def register():
+  def register_static():
     # COMING SOON
     return render_template('register.html')
 
@@ -101,9 +101,9 @@ with sq.connect('base.db') as con:
   @app.route('/register/', methods=['POST'])
   def register(): #ГОТОВО, кроме 'register.html' --> ?
     try:
-      name = request.form[name]
-      email = request.form[email]
-      password = request.form[password]
+      name = request.form['name']
+      email = request.form['email']
+      password = request.form['password']
       created_datatime = time.ctime(time.time)
       updated_datatime = created_datatime
       cur.execute("""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password}, {created_datatime}, {updated_datatime})""")
@@ -115,8 +115,8 @@ with sq.connect('base.db') as con:
     
   @app.route('/login/', methods=['POST'])
   def login():
-    name = request.form[name]
-    password = request.form[password]
+    name = request.form['name']
+    password = request.form['password']
     cur.execute("""SELECT password FROM users WHERE name == {name}""")
     user_data = cur.fetchone()[0]
     if password == user_data:
