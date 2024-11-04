@@ -2,7 +2,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 {{ cards(cards_lst) }}
-{% if notification != None %}
+{% if notification is defined %}
 {{ call_notification(notification.class, notification.title, notification.text) }}
 {% endif %}
 {% endblock %}
