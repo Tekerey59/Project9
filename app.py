@@ -6,7 +6,7 @@ app = Flask('Suite')
 #Обработка GET запросов
 @app.route('/')
 def index():
-  return render_template('testpage.html')
+  return render_template('index.html')
 
 @app.route('/account/')
 def account():

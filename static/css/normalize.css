@@ -1,0 +1,54 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+ul,
+ol {
+  padding: 0;
+}
+li {
+  list-style-type: none;
+}
+body {
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
+  line-height: 1.5;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd,
+pre,
+xmp {
+  margin: 0;
+  padding: 0;
+}
+
+a:link,
+a:visited,
+a:link:active,
+a:visited:active {
+  color: var(--text);
+  text-decoration: none;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  outline: none;
+}
