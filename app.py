@@ -101,21 +101,21 @@ with sq.connect('base.db') as con:
   @app.route('/register/', methods=['POST'])
   def register(): #ГОТОВО, кроме 'register.html' --> ?
     try:
-      name = request.form[name]
-      email = request.form[email]
+      name = request.form['name']
+      email = request.form['email']
       password = request.form[password]
       created_datatime = time.ctime(time.time)
       updated_datatime = created_datatime
-      cur.execute("""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password}, {created_datatime}, {updated_datatime})""")
+      cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password}, {created_datatime}, {updated_datatime})""")
       return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Регистрация выполнена!"})
     except Exception as err:
       return render_template('index.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка регистрации, попробуйте ещё раз"})
     
   @app.route('/login/', methods=['POST'])
   def login():
-    name = request.form[name]
-    password = request.form[password]
-    cur.execute("""SELECT password FROM users WHERE name == {name}""")
+    name = request.form['name']
+    password = request.form['password']
+    cur.execute(f"""SELECT password FROM users WHERE name == {name}""")
     user_data = cur.fetchone()[0]
     if password == user_data:
       return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Вы вошли в аккаунт!"})
