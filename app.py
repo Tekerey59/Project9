@@ -108,7 +108,7 @@ with sq.connect('base.db') as con:
       created_datatime = time.ctime(time.time)
       updated_datatime = created_datatime
       try:
-        cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password}, {created_datatime}, {updated_datatime})""")
+        cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password_first}, {created_datatime}, {updated_datatime})""")
         return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Регистрация выполнена!"})
       except Exception as err:
         return render_template('register.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка регистрации, попробуйте ещё раз"})
