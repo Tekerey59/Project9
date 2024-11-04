@@ -101,29 +101,25 @@ with sq.connect('base.db') as con:
   @app.route('/register/', methods=['POST'])
   def register(): #ГОТОВО, кроме 'register.html' --> ?
     try:
-      name = request.form['name']
-      email = request.form['email']
-      password = request.form['password']
+      name = request.form[name]
+      email = request.form[email]
+      password = request.form[password]
       created_datatime = time.ctime(time.time)
       updated_datatime = created_datatime
       cur.execute("""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ({name}, {email}, {password}, {created_datatime}, {updated_datatime})""")
-      notification = {"class":"success", "title":"Успех", "text":"Регистрация выполнена!"}
-      return render_template('index.html', notification)
+      return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Регистрация выполнена!"})
     except Exception as err:
-      notification = {"class":"error", "title":"Ошибка", "text":"Ошибка регистрации, попробуйте ещё раз"}
-      return render_template('register.html', notification)
+      return render_template('index.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка регистрации, попробуйте ещё раз"})
     
   @app.route('/login/', methods=['POST'])
   def login():
-    name = request.form['name']
-    password = request.form['password']
+    name = request.form[name]
+    password = request.form[password]
     cur.execute("""SELECT password FROM users WHERE name == {name}""")
     user_data = cur.fetchone()[0]
     if password == user_data:
-      notification = {"class":"success", "title":"Успех", "text":"Вы вошли в аккаунт!"}
-      return render_template('index.html', notification)
+      return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Вы вошли в аккаунт!"})
     else:
-      notification = {"class":"error", "title":"Ошибка", "text":"Ошибка входа, попробуйте ещё раз"}
-      return render_template('login.html', notification)
+      return render_template('login.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка входа, попробуйте ещё раз"})
 
   app.run(debug=True)
