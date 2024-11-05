@@ -1,5 +1,5 @@
-{% from 'tools.html' import cards, call_notification %}
-{% extends 'layout.html' %}
+{% from 'other/tools.html' import cards, call_notification %}
+{% extends 'layouts/main.html' %}
 {% block content %}
 {{ cards(cards_lst) }}
 {% if notification is defined %}
