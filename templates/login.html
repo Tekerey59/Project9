@@ -1,16 +1,46 @@
-{% from 'tools.html' import call_log_reg_notification %}
 {% extends 'log_reg_layout.html' %}
 {% block title %}Вход{% endblock %}
 {% block content %}
-{% if notification is defined %}
-{{ call_log_reg_notification(notification.class, notification.title, notification.text) }}
+
+{% if error is defined %}
+
+{% if error == 2 %}
+<p class="layout-main-form-error" style="text-align: center;">Неправильные данные для входа!</p>
+{% elif error == 3 %}
+<p class="layout-main-form-error" style="text-align: center;">Должны быть заполнены все поля!</p>
+{% elif error == 0 %}
+<p class="layout-main-form-error" style="text-align: center;">Ошибка сервера!</p>
 {% endif %}
-<label for="name" class="layout-main-form-label">Ваше имя:</label>
-<input name="name" type="text" placeholder="Иванов Иван Иванович" class="layout-main-form-input">
+
+<label for="email" class="layout-main-form-label">Ваша электронная почта:</label>
+<input name="email" type="email" placeholder="exaple@email.com" class="layout-main-form-input {% if error in [2, 3] %}layout-main-form-input-error{% endif %}">
+
+{% if error == 1 %}
+<p class="layout-main-form-error">Неправильно указана почта! Формат: example@email.com</p>
+{% endif %}
+
+<label for="password" class="layout-main-form-label">Ваш пароль:</label>
+<div class="layout-main-form-input-container {% if error in [2, 3] %}layout-main-form-input-error{% endif %}">
+  <input name="password" type="password" placeholder="########" class="layout-main-form-input-container-input layout-main-form-input-show_hide empty-input">
+  <button class="layout-main-form-input-container-button layout-main-form-input-button-show_hide empty-button">
+    <img src="{{ url_for('static', filename='images/show.png') }}" alt="" class="layout-main-form-input-container-button-img layout-main-form-input-show_hide-img">
+  </button>
+</div>
+
+{% else %}
+
 <label for="email" class="layout-main-form-label">Ваша электронная почта:</label>
 <input name="email" type="email" placeholder="exaple@email.com" class="layout-main-form-input">
-<label for="password" class="layout-main-form-label">Придумайте пароль:</label>
-<input name="password" type="password" placeholder="password" class="layout-main-form-input">
+<label for="password" class="layout-main-form-label">Ваш пароль:</label>
+<div class="layout-main-form-input-container">
+  <input name="password" type="password" placeholder="########" class="layout-main-form-input-container-input layout-main-form-input-show_hide empty-input">
+  <button class="layout-main-form-input-container-button layout-main-form-input-button-show_hide empty-button">
+    <img src="{{ url_for('static', filename='images/show.png') }}" alt="" class="layout-main-form-input-container-button-img layout-main-form-input-show_hide-img">
+  </button>
+</div>
+
+{% endif %}
+
 {% endblock %}
 {% block after_content %}
 <a href="/register/" class="layout-main-form-label layout-main-form-other">Регистрация</a>

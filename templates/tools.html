@@ -7,15 +7,6 @@
     <p class="tool-notification-content">{{ text }}</p>
   </div>
 </div>
-{% endmacro %} {% macro call_log_reg_notification(class, title, text) %}
-<div class="tool-notification">
-  <div class="tool-notification-container tool-notification-{{ class }}">
-    <h3 class="tool-notification-h tool-notification-h-{{ class }}">
-      {{ title }}
-    </h3>
-    <p class="tool-notification-content">{{ text }}</p>
-  </div>
-</div>
 {% endmacro %} {% macro cards(lst) %}
 <div class="tool-cards">
   {% for item in lst %}
