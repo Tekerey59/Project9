@@ -3,11 +3,19 @@ from flask import render_template
 from flask import request
 import sqlite3 as sq 
 import time
+import hashlib
 app = Flask('Suite')
+
 
 with sq.connect('base.db', check_same_thread=False) as con:
   cur = con.cursor()
+  with open('db.sql', 'r') as file:
+      sql_script = file.read()
+  cur.executescript(sql_script)
+  con.commit()
 
+
+  
                                                       #Обработка GET запросов
   @app.route('/')
   def get_index():
@@ -118,11 +126,10 @@ with sq.connect('base.db', check_same_thread=False) as con:
     
   @app.route('/login/', methods=['POST'])
   def post_login():
-    name1 = request.form['name']
+    email1 = request.form['email']
     password1 = request.form['password']
-    cur.execute(f"""SELECT password FROM users WHERE name == '{name1}'""")
-    user_data = cur.fetchone()[0]
-    if password1 == user_data:
+    cur.execute(f"""SELECT id FROM users WHERE email == '{email1}' AND password == '{password1}'""")
+    if not cur.fetchone() is None:
       return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Вы вошли в аккаунт!"})
     else:
       return render_template('login.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка входа, попробуйте ещё раз"})
