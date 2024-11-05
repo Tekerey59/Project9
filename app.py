@@ -3,7 +3,7 @@ from flask import render_template
 from flask import request
 import sqlite3 as sq 
 import time
-import hashlib
+import hashlib as h
 app = Flask('Suite')
 
 
@@ -14,7 +14,22 @@ with sq.connect('base.db', check_same_thread=False) as con:
   cur.executescript(sql_script)
   con.commit()
 
-
+  def hash(passwd, mail):
+    cur.execute(f"""SELECT id FROM users WHERE email == '{mail}'""")
+    tmp = cur.fetchone()
+    print(type(tmp))
+    if tmp != None:
+      print('Not Noneee')
+      print(str(tmp[0]), 'TUPLESSSS')
+      return h.sha3_512(h.md5(h.sha256(bytes(str(tmp[0]) + passwd + 'saltedXEXEXEXE', 'utf-8')).digest()).digest()).hexdigest()
+    else:
+      print('Noneeee')
+      cur.execute("""SELECT MAX(id) FROM users;""")
+      tmp = cur.fetchone()
+      if tmp == None:
+        tmp = [1]
+      print(str(int(tmp[0] + 1)), ' NON TUUUPLEEEE')
+      return h.sha3_512(h.md5(h.sha256(bytes(str(int(tmp[0]) + 1) + passwd + 'saltedXEXEXEXE', 'utf-8')).digest()).digest()).hexdigest()
   
                                                       #Обработка GET запросов
   @app.route('/')
@@ -116,22 +131,28 @@ with sq.connect('base.db', check_same_thread=False) as con:
       created_datatime1 = time.time()
       updated_datatime1 = created_datatime1
       try:
-        cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{password_first1}', '{created_datatime1}', '{updated_datatime1}')""")
-        cur.connection.commit()
-        return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Регистрация выполнена!"})      
+        print('tryyy')
+        psswd_hashed = str(hash(password_second1, email1))
+        print(psswd_hashed)
+        cur.execute(f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime1}', '{updated_datatime1}')""")
+        con.commit()
+        return render_template('index.html')      
       except Exception as err:
-        return render_template('register.html', notification = {"class":"error", "title":f"{err}", "text":"Ошибка регистрации, попробуйте ещё раз"})
+        return render_template('register.html', error = 0)
     else:
-      return render_template('register.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка регистрации, пароли не совпадают, попробуйте ещё раз"})
+      return render_template('register.html', error  = 2)
     
   @app.route('/login/', methods=['POST'])
   def post_login():
     email1 = request.form['email']
-    password1 = request.form['password']
+    password1 = hash(request.form['password'], email1)
+    print(password1)
     cur.execute(f"""SELECT id FROM users WHERE email == '{email1}' AND password == '{password1}'""")
-    if not cur.fetchone() is None:
-      return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Вы вошли в аккаунт!"})
+    if cur.fetchone() != None:
+      return render_template('index.html')
     else:
-      return render_template('login.html', notification = {"class":"error", "title":"Ошибка", "text":"Ошибка входа, попробуйте ещё раз"})
+      return render_template('login.html', error = 2)
 
   app.run(debug=True)
+
+  #ПОСЛЕ СОЗДАНИЯ БД ДОБАВИТЬ ВРУЧНУЮ 1-ю СТРОКУ! ВРЕМЕННО.
