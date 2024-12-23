@@ -1,8 +1,22 @@
-{% from 'other/tools.html' import cards, call_notification %}
+{% from 'other/tools.html' import process_cards, process_notification %}
 {% extends 'layouts/main.html' %}
 {% block content %}
-{{ cards(cards_list) }}
-{% if notification is defined %}
-{{ call_notification(notification.class, notification.title, notification.text) }}
+
+<div class="cards-category">
+  <p class="cards-category-header">Новые:</p>
+  {{ process_cards(new_cards) }}
+</div>
+
+{% if recent_cards is defined %}
+<div class="cards-category">
+  <p class="cards-category-header">Недавно просмотренные:</p>
+  {{ process_cards(recent_cards) }}
+</div>
 {% endif %}
+
+{% if notifications is defined %}
+{{ process_notification(notifications) }}
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 {% endblock %}

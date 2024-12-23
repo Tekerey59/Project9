@@ -32,69 +32,71 @@
 
   <body class="root">
     <header class="layout-header">
-      <a href="/">
-        <div class="layout-header-icon">⌬</div>
-      </a>
-      <div class="layout-header-search">
-        <input
-          placeholder="Поиск..."
-          type="text"
-          class="layout-header-search-input empty-input"
-          id="layout-header-search-input"
-        />
-        <button
-          class="layout-header-search-button empty-button"
-          id="layout-header-search-button-clear"
-        >
-          <img
-            src="{{ url_for('static', filename='images/ui/x.png') }}"
-            alt=""
-            class="layout-header-search-button-img"
-          />
-        </button>
-        <button
-          class="layout-header-search-button empty-button"
-          id="layout-header-search-button-send"
-        >
-          <img
-            src="{{ url_for('static', filename='images/ui/search.png') }}"
-            alt=""
-            class="layout-header-search-button-img"
-          />
-        </button>
-      </div>
-      <div class="layout-header-nav">
-        <a href="/usful-information/" class="layout-header-nav-link"
-          >Полезная информация</a
-        >
-        <a href="/about/" class="layout-header-nav-link">О нас</a>
-        {% if user is defined %}
-        <a href="/like/" class="layout-header-nav-link">
-          <img
-            src="{{ url_for('static', filename='images/ui/heart.png') }}"
-            alt=""
-            class="layout-header-nav-link-like-img"
-          />
+      <div class="layout-header-container">
+        <a href="/">
+          <div class="layout-header-icon">⌬</div>
         </a>
-        <a href="/account/" class="layout-header-nav-link">
-          <img
-            src="{{ url_for('static', filename='images/ui/profile-user.png') }}"
-            alt=""
-            class="layout-header-nav-link-account-img"
+        <div class="layout-header-search">
+          <input
+            placeholder="Поиск..."
+            type="text"
+            class="layout-header-search-input empty-input"
+            id="layout-header-search-input"
           />
-        </a>
-        {% else %}
-        <a
-          href="/register/"
-          class="layout-header-nav-link layout-header-nav-link-register"
-          >Регистрация</a
-        >
-        <a
-          href="/login/"
-          class="layout-header-nav-link layout-header-nav-link-login"
-          >Вход</a
-        >
-        {% endif %}
+          <button
+            class="layout-header-search-button empty-button"
+            id="layout-header-search-button-clear"
+          >
+            <img
+              src="{{ url_for('static', filename='images/ui/x.png') }}"
+              alt=""
+              class="layout-header-search-button-img"
+            />
+          </button>
+          <button
+            class="layout-header-search-button empty-button"
+            id="layout-header-search-button-send"
+          >
+            <img
+              src="{{ url_for('static', filename='images/ui/search.png') }}"
+              alt=""
+              class="layout-header-search-button-img"
+            />
+          </button>
+        </div>
+        <div class="layout-header-nav">
+          <a href="/information/" class="layout-header-nav-link"
+            >Полезная информация</a
+          >
+          <a href="/about/" class="layout-header-nav-link">О нас</a>
+          {% if user is defined %}
+          <a href="/like/" class="layout-header-nav-link">
+            <img
+              src="{{ url_for('static', filename='images/ui/heart.png') }}"
+              alt=""
+              class="layout-header-nav-link-like-img"
+            />
+          </a>
+          <a href="/account/" class="layout-header-nav-link">
+            <img
+              src="{{ url_for('static', filename='images/ui/profile-user.png') }}"
+              alt=""
+              class="layout-header-nav-link-account-img"
+            />
+          </a>
+          {% else %}
+          <a
+            href="/register/"
+            class="layout-header-nav-link layout-header-nav-link-register"
+            >Регистрация</a
+          >
+          <a
+            href="/login/"
+            class="layout-header-nav-link layout-header-nav-link-login"
+            >Вход</a
+          >
+          {% endif %}
+        </div>
       </div>
     </header>
     <section class="layout-main">{% block content %}{% endblock %}</section>

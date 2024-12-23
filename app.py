@@ -33,8 +33,8 @@ with sq.connect('base.db', check_same_thread=False) as con:
   
                                                       #Обработка GET запросов
   @app.route('/')
-  def get_index(): #TODO: cards_list={ ... }
-    return render_template('index.html', cards_list=[{"id": "1", "name": "Этилбензол", "name_iupac": "Этилбензол", "mass": 106.165, "liked": "true"}, {"id": "1", "name": "Этилбензол", "name_iupac": "Этилбензол", "mass": 106.165, "liked": "false"}])
+  def get_index(): #TODO: new_cards=[{ ... }], recent_cards=[{ ... }]
+    return render_template('index.html', recent_cards=[{"id": "1", "name": "Этилбензол", "name_iupac": "Этилбензол", "mass": 106.165, "liked": "true"}], new_cards=[{"id": "1", "name": "Этилбензол", "name_iupac": "Этилбензол", "mass": 106.165, "liked": "true"}, {"id": "1", "name": "Этилбензол", "name_iupac": "Этилбензол", "mass": 106.165, "liked": "false"}])
 
   @app.route('/account/')
   def get_account():
@@ -81,7 +81,7 @@ with sq.connect('base.db', check_same_thread=False) as con:
     # COMING SOON
     return render_template()
 
-  @app.route('/usful-information/')
+  @app.route('/information/')
   def get_inf(id):
     # COMING SOON
     return render_template()
@@ -117,9 +117,9 @@ with sq.connect('base.db', check_same_thread=False) as con:
   def post_chem_delete():
     idt = request.form['confirmation']
     if idt:
-      return render_template('index.html', notification = {"class":"success", "title":"Успех", "text":"Вещество удалено!"})
+      return render_template('index.html', notifications = [{"class":"success", "title":"Успех", "text":"Вещество удалено!"}])
     else:
-      return render_template('chem.html', notification = {"class":"error", "title":"Отмена", "text":"Вещество не было удалено"})
+      return render_template('chem.html', notifications = [{"class":"error", "title":"Отмена", "text":"Вещество не было удалено"}])
     
   @app.route('/register/', methods=['POST'])
   def post_register(): 

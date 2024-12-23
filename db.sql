@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS users (
               email TEXT NOT NULL,
               password CHAR[128] NOT NULL,
               created_datetime TEXT NOT NULL,
-              upgrated_datatime TEXT NOT NULL,
+              updated_datatime TEXT NOT NULL,
               rights INTEGER NOT NULL DEFAULT 1)
 

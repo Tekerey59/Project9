@@ -1,6 +1,12 @@
-let card_resize = () => {
+let cards_resize = () => {
   let blocks = Math.floor($(".layout-main").width() / 300);
-  $(".tool-cards").css("width", blocks < 4 ? blocks * 300 + blocks * 10 : 1240);
+  $(".tool-cards")
+    .get()
+    .forEach((element) => {
+      let count = $(element).children().length;
+      let len = blocks < count ? blocks : count;
+      $(element).css("width", len < 4 ? len * 300 + (len - 1) * 10 : 1240);
+    });
 };
 let set_like = (element, state) => {
   if (state) {
@@ -29,6 +35,6 @@ $(".tool-cards-item").on("mouseup", (e) => {
     location.href = "/" + $(e.currentTarget).attr("data-id") + "/";
   }
 });
-$(window).on("resize", card_resize);
+$(window).on("resize", cards_resize);
 
-card_resize();
+cards_resize();
