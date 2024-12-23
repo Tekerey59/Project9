@@ -6,11 +6,11 @@ $(".layout-main-form-input-button-show_hide").on("click", (e) => {
   if (input.attr("type") == "password") {
     input.attr("placeholder", "P@$$w0rD")
     input.attr("type", "text");
-    icon.attr("src", "/static/images/hide.png")
+    icon.attr("src", "/static/images/ui/hide.png")
   } else {
     input.attr("placeholder", "########")
     input.attr("type", "password");
-    icon.attr("src", "/static/images/show.png")
+    icon.attr("src", "/static/images/ui/show.png")
   }
   e.preventDefault();
   e.stopPropagation();

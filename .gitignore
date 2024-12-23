@@ -1,2 +1,4 @@
 personal/
 base.db
+.vscode
+.fuse_hidden*

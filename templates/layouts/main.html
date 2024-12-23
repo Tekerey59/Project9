@@ -23,6 +23,10 @@
       href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
     <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
   </head>
 
@@ -43,7 +47,7 @@
           id="layout-header-search-button-clear"
         >
           <img
-            src="{{ url_for('static', filename='images/x.png') }}"
+            src="{{ url_for('static', filename='images/ui/x.png') }}"
             alt=""
             class="layout-header-search-button-img"
           />
@@ -53,7 +57,7 @@
           id="layout-header-search-button-send"
         >
           <img
-            src="{{ url_for('static', filename='images/search.png') }}"
+            src="{{ url_for('static', filename='images/ui/search.png') }}"
             alt=""
             class="layout-header-search-button-img"
           />
@@ -67,14 +71,14 @@
         {% if user is defined %}
         <a href="/like/" class="layout-header-nav-link">
           <img
-            src="{{ url_for('static', filename='images/heart.png') }}"
+            src="{{ url_for('static', filename='images/ui/heart.png') }}"
             alt=""
             class="layout-header-nav-link-like-img"
           />
         </a>
         <a href="/account/" class="layout-header-nav-link">
           <img
-            src="{{ url_for('static', filename='images/profile-user.png') }}"
+            src="{{ url_for('static', filename='images/ui/profile-user.png') }}"
             alt=""
             class="layout-header-nav-link-account-img"
           />

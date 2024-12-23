@@ -26,6 +26,11 @@
     )
     20%;
 }
+
+.layout-header > * {
+  margin: 0 10px;
+}
+
 .layout-header-icon {
   transition: var(--transition-fast);
   height: 60px;
@@ -204,27 +209,45 @@
 .tool-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, 300px);
-  grid-auto-rows: 200px;
+  grid-auto-rows: max-content;
   gap: 10px;
 }
 .tool-cards-item {
-  height: 300px;
+  cursor: pointer;
+  font-family: "Poppins", serif;
+  position: relative;
+  padding: 10px;
+  height: max-content;
   width: 300px;
   display: flex;
   flex-direction: column;
   background: var(--color-extra);
   border-radius: 10px;
 }
-.tool-cards-item-h2,
-.tool-cards-item-h3 {
-  margin: 0 0 0 10px;
+.tool-cards-item-name,
+.tool-cards-item-extra {
+  word-break: break-all;
+  cursor: text;
+  user-select: text;
   color: var(--color-sec);
 }
-.tool-cards-item-h3 {
-  opacity: 0.6;
+.tool-cards-item-name {
+  font-size: 20px;
+}
+.tool-cards-item-extra {
+  font-style: italic;
+  opacity: 0.7;
 }
 .tool-cards-item-img {
-  height: 200px;
-  width: 300px;
-  border-radius: 10px;
+  height: 180px;
+  width: 280px;
+  border-radius: 8px;
+  margin: 0 0 10px 0;
+}
+.tool-cards-item-like {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  height: 24px;
+  width: 24px;
 }

@@ -7,14 +7,26 @@
     <p class="tool-notification-content">{{ text }}</p>
   </div>
 </div>
-{% endmacro %} {% macro cards(lst) %}
+{% endmacro %} {% macro cards(items) %}
 <div class="tool-cards">
-  {% for item in lst %}
-  <a href="/{{ item.id }}/" class="tool-cards-item">
-    <img src="{{ item.struct }}" alt="" class="tool-cards-item-img" />
-    <h2 class="tool-cards-item-h2">{{ item.name }}</h2>
-    <h3 class="tool-cards-item-h3">{{ item.iupac }}</h3>
-  </a>
+  {% for item in items %}
+  <div class="tool-cards-item" data-id="{{ item.id }}">
+    <img
+      src="{{ url_for('static', filename='images/structures/'+item.id+'.png') }}"
+      alt=""
+      class="tool-cards-item-img"
+    />
+    <p class="tool-cards-item-name">{{ item.name }}</p>
+    <p class="tool-cards-item-extra">{{ item.name_iupac }}</p>
+    <p class="tool-cards-item-extra">Масса: {{ item.mass }}</p>
+    <img
+      src="{{ url_for('static', filename='images/ui/' + ('heart-red.png' if item.liked == 'true' else 'heart-empty.png')) }}"
+      alt=""
+      class="tool-cards-item-like"
+      data-id="{{ item.id }}"
+      data-state="{{ item.liked }}"
+    />
+  </div>
   {% endfor %}
 </div>
 <script src="{{ url_for('static', filename='js/cards.js') }}"></script>

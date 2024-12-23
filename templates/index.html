@@ -1,7 +1,7 @@
 {% from 'other/tools.html' import cards, call_notification %}
 {% extends 'layouts/main.html' %}
 {% block content %}
-{{ cards(cards_lst) }}
+{{ cards(cards_list) }}
 {% if notification is defined %}
 {{ call_notification(notification.class, notification.title, notification.text) }}
 {% endif %}

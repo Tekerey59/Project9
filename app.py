@@ -33,8 +33,8 @@ with sq.connect('base.db', check_same_thread=False) as con:
   
                                                       #Обработка GET запросов
   @app.route('/')
-  def get_index():
-    return render_template('index.html')
+  def get_index(): #TODO: cards_list={ ... }
+    return render_template('index.html', cards_list=[{"id": "1", "name": "Этилбензол", "name_iupac": "Этилбензол", "mass": 106.165, "liked": "true"}, {"id": "1", "name": "Этилбензол", "name_iupac": "Этилбензол", "mass": 106.165, "liked": "false"}])
 
   @app.route('/account/')
   def get_account():
