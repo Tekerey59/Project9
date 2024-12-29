@@ -15,22 +15,7 @@ with sq.connect('base.db', check_same_thread=False) as con:
   con.commit()
 
   def hash(passwd, mail):
-    cur.execute(f"""SELECT id FROM users WHERE email == '{mail}'""")
-    tmp = cur.fetchone()
-    print(type(tmp))
-    if tmp != None:
-      print('Not Noneee')
-      print(str(tmp[0]), 'TUPLESSSS')
-      return h.sha3_512(h.md5(h.sha256(bytes(str(tmp[0]) + passwd + 'saltedXEXEXEXE', 'utf-8')).digest()).digest()).hexdigest()
-    else:
-      print('Noneeee')
-      cur.execute("""SELECT MAX(id) FROM users;""")
-      tmp = cur.fetchone()
-      if tmp == None:
-        tmp = [1]
-      print(str(int(tmp[0] + 1)), ' NON TUUUPLEEEE')
-      return h.sha3_512(h.md5(h.sha256(bytes(str(int(tmp[0]) + 1) + passwd + 'saltedXEXEXEXE', 'utf-8')).digest()).digest()).hexdigest()
-  
+    return h.sha3_512(h.md5(h.sha256(bytes(mail + passwd + 'saltedXEXEXEXE', 'utf-8')).digest()).digest()).hexdigest()
                                                       #Обработка GET запросов
   @app.route('/')
   def get_index(): #TODO: new_cards=[{ ... }], recent_cards=[{ ... }]
