@@ -3,16 +3,9 @@
 {% block content %}
 
 <div class="cards-category">
-  <p class="cards-category-header">Новые:</p>
+  <p class="cards-category-header">Найдено:</p>
   {{ process_cards(view_cards) }}
 </div>
-
-{% if recent_cards is defined %}
-<div class="cards-category">
-  <p class="cards-category-header">Недавно просмотренные:</p>
-  {{ process_cards(recent_cards) }}
-</div>
-{% endif %}
 
 {% if notifications is defined %}
 {{ process_notification(notifications) }}

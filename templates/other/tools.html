@@ -1,3 +1,4 @@
+<!-- ! TODO -->
 {% macro process_notification(items) %}
 {% for item in items %}
 <div class="tool-notification">
@@ -9,7 +10,9 @@
   </div>
 </div>
 {% endfor %}
-{% endmacro %} {% macro process_cards(items) %}
+{% endmacro %}
+<!-- PROCESS_CARDS -->
+{% macro process_cards(items) %}
 <div class="tool-cards">
   {% for item in items %}
   <div class="tool-cards-item" data-id="{{ item.id }}">

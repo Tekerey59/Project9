@@ -1,11 +1,16 @@
 let cards_resize = () => {
   let blocks = Math.floor($(".layout-main").width() / 300);
+  // TODO
+  // let width = blocks < 4 ? blocks * 300 + (blocks - 1) * 10 : 1240
+  // $("tool-cards").css("width", )
   $(".tool-cards")
     .get()
     .forEach((element) => {
       let count = $(element).children().length;
       let len = blocks < count ? blocks : count;
-      $(element).css("width", len < 4 ? len * 300 + (len - 1) * 10 : 1240);
+      let width = len < 4 ? len * 300 + (len - 1) * 10 : 1240
+      $(element).css("width", width);
+      $(element).parents(".cards-category").children(".cards-category-header").css("width", width)
     });
 };
 let set_like = (element, state) => {

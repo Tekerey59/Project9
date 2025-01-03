@@ -99,8 +99,15 @@
         </div>
       </div>
     </header>
-    <section class="layout-main">{% block content %}{% endblock %}</section>
-    <footer class="layout-footer"></footer>
+    <section class="layout-main">
+      <div class="layout-main-sidebar">
+        <div class="layout-main-sidebar-top"></div>
+        <div class="layout-main-sidebar-bottom"></div>
+      </div>
+      <div class="layout-main-container">
+        {% block content %}{% endblock %}
+      </div>
+    </section>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>
