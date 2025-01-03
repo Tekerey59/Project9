@@ -68,7 +68,7 @@ _**GET:**_
   Недавно просмотренные: последние 6
   Новые: последние 20 из БД с отступом в 20*(page-1) строк<br>
   Шаблон: index.html<br>
-  Параметры шаблона: view_cards: list, view_cards_pages_count: int, view_cards_current_page: **page**, recent_cards: list
+  Параметры шаблона: recent_cards: list, view_cards: list, view_cards_pages_count: int, view_cards_current_page: **page**
   </p>
 - **/search/**
   - ?q=text - запрос
@@ -110,7 +110,7 @@ OPT - опционально (про параметр)
 │   └── register.html
 │
 └── main.html
-    ├── index.html (view_cards, view_cards_pages_count, view_cards_current_page, OPT recent_cards)
+    ├── index.html (OPT recent_cards: list, view_cards, view_cards_pages_count, view_cards_current_page)
     ├── search.html (view_cards, view_cards_pages_count, view_cards_current_page)
     └── account.html
 ```

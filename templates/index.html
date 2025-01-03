@@ -2,17 +2,17 @@
 {% extends 'layouts/main.html' %}
 {% block content %}
 
-<div class="cards-category">
-  <p class="cards-category-header">Новые:</p>
-  {{ process_cards(view_cards) }}
-</div>
-
 {% if recent_cards is defined %}
 <div class="cards-category">
   <p class="cards-category-header">Недавно просмотренные:</p>
   {{ process_cards(recent_cards) }}
 </div>
 {% endif %}
+
+<div class="cards-category">
+  <p class="cards-category-header">Новые:</p>
+  {{ process_cards(view_cards) }}
+</div>
 
 {% if notifications is defined %}
 {{ process_notification(notifications) }}

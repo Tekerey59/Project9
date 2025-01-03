@@ -37,6 +37,48 @@ with sq.connect("base.db", check_same_thread=False) as con:
         # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
         return render_template(
             "index.html",
+            recent_cards=[
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "mass": 106.165,
+                    "liked": "false",
+                },{
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "mass": 106.165,
+                    "liked": "false",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "mass": 106.165,
+                    "liked": "false",
+                },{
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "mass": 106.165,
+                    "liked": "true",
+                }
+            ],
             view_cards=[
                 {
                     "id": "1",
@@ -94,75 +136,6 @@ with sq.connect("base.db", check_same_thread=False) as con:
             ],
             view_cards_pages_count=1,
             view_cards_current_page=1,
-            recent_cards=[
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },{
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },{
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },{
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                }
-            ],
         )
 
     # АККАУНТ
