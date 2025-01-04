@@ -265,7 +265,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             except Exception as err:
                 return render_template("register.html", error=0)
         else:
-            return render_template("register.html", error=2)
+            return render_template("register.html", register_error=2)
 
     @app.route("/login/", methods=["POST"])
     def post_login():
@@ -278,6 +278,6 @@ with sq.connect("base.db", check_same_thread=False) as con:
         if cur.fetchone() != None:
             return render_template("index.html")
         else:
-            return render_template("login.html", error=2)
+            return render_template("login.html", login_error=2)
 
     app.run(debug=True)

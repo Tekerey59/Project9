@@ -77,7 +77,7 @@ _**GET:**_
   <p>
   На странице показываются карточки с веществами, найденные по запросу из бд с отступом в 20*(page-1) строк<br>
   Шаблон: search.html<br>
-  Параметры шаблона: view_cards: list, view_cards_pages_count: int, view_cards_current_page: **page**
+  Параметры шаблона: view_cards(list), view_cards_pages_count(int), view_cards_current_page(**page**)
   </p>
 - **/login/** <br>
   <p>
@@ -93,23 +93,36 @@ _**GET:**_
 _**POST:**_
 - **/login/** <br>
   <p>
-  Шаблон: login.html
+  Шаблон: login.html<br>
+  Параметры шаблона: login_error(int 0-3)<br>
+  Ошибки: <br>
+  0 - "Ошибка сервера!"<br>
+  1 - "Неправильно указана почта! Формат: example@email.com"<br>
+  2 - "Неправильные данные для входа!"<br>
+  3 - "Должны быть заполнены все поля!"
   </p>
 - **/register/** <br>
   <p>
-  Шаблон: register.html
+  Шаблон: register.html<br>
+  Параметры шаблона: register_error(int 0-4) <br>
+  Ошибки: <br>
+  0 - "Ошибка сервера!" <br>
+  1 - "Неправильно указана почта! Формат: example@email.com"<br>
+  2 - "Пароли не совпадают!"<br>
+  3 - "Должны быть заполнены все поля!"<br>
+  4 - "Указанная почта уже используется!"
   </p>
 
 ## ШАБЛОНЫ
 
-Во все шаблоны передается параметр APP_NAME
+! Во все шаблоны передается параметр APP_NAME !
 
 OPT - опционально (про параметр)
 
 ```
 ├── login_register.html
-│   ├── login.html
-│   └── register.html
+│   ├── login.html (OPT login_error)
+│   └── register.html (OPT register_error)
 │
 └── main.html
     ├── index.html (OPT recent_cards: list, view_cards, view_cards_pages_count, view_cards_current_page)
@@ -123,11 +136,11 @@ JSON шаблон элементов списков (пример):
 
 ```json
 {
-  "id": 1, // из БД
-  "name": "Этилбензол", // из БД
+  "id": 1,                    // из БД
+  "name": "Этилбензол",       // из БД
   "name_iupac": "Этилбензол", // из БД
-  "formula": "C8H10", // из БД
-  "mass": 106.165, // из БД
-  "liked": "true" // из сессии или аккаунта
+  "formula": "C8H10",         // из БД
+  "mass": 106.165,            // из БД
+  "liked": "true"             // из сессии или аккаунта
 }
 ```
