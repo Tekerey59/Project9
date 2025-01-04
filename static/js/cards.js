@@ -6,7 +6,7 @@ let set_like = (element, state) => {
   if (state) {
     $(element).attr("src", "/static/images/ui/heart-red.png");
   } else {
-    $(element).attr("src", "/static/images/ui/heart-empty.png");
+    $(element).attr("src", "/static/images/ui/heart-empty-dark.png");
   }
   $(element).attr("data-state", state);
 };

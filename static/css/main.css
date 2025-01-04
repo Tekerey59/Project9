@@ -58,7 +58,8 @@
 .layout-header-search {
   position: relative;
   height: auto;
-  width: 400px;
+  width: 100%;
+  max-width: 600px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -116,7 +117,7 @@
 }
 .layout-header-search:not(:has(> .layout-header-search-advanced.active)) {
   transition: var(--transition);
-  transition-delay: var(--transition);
+  transition-delay: calc(var(--transition) - 0.1s);
 }
 .layout-header-search:has(> .layout-header-search-advanced.active) {
   border-radius: 10px 10px 0 0;
@@ -245,7 +246,7 @@
 .cards-category {
   height: auto;
   width: 100%;
-  margin-bottom: 20px;
+  margin: 0 0 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -254,7 +255,7 @@
   width: 100%;
   font-size: 24px;
   color: var(--color-sec);
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
 }
 .tool-cards {
   width: 100%;
@@ -301,4 +302,31 @@
   right: 16px;
   height: 24px;
   width: 24px;
+}
+
+.tool-pages-row {
+  height: 50px;
+  width: auto;
+  margin: 20px 0 0 0;
+  display: flex;
+  align-items: center;
+}
+.tool-pages-row-item-empty {
+  font-size: 20px;
+  color: var(--color-sec);
+  height: 50px;
+  width: 40px;
+  margin: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tool-pages-row-item {
+  background: var(--color-extra);
+  border-radius: 5px;
+}
+.tool-pages-row-item.active {
+  cursor: default;
+  background: var(--color-primary);
+  border: none;
 }

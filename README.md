@@ -68,7 +68,13 @@ _**GET:**_
   Недавно просмотренные: последние 6
   Новые: последние 20 из БД с отступом в 20*(page-1) строк<br>
   Шаблон: index.html<br>
-  Параметры шаблона: recent_cards: list, view_cards: list, view_cards_pages_count: int, view_cards_current_page: **page**
+  Параметры шаблона: recent_cards(list), view_cards(list), view_cards_pages_count(int), view_cards_current_page: **page**
+  </p>
+- **/.id./**
+  <p>
+  Страница в-ва. Его характеристики, синтезы, в которых он участвует. Синтезы в следующем порядке: сначала синтез его, затем в которых участвует<br>
+  Шаблон: substance.html<br>
+  Параметры шаблона: substance(obj)
   </p>
 - **/search/**
   - ?q=text - запрос
@@ -124,10 +130,19 @@ OPT - опционально (про параметр)
 │   ├── login.html (OPT login_error)
 │   └── register.html (OPT register_error)
 │
-└── main.html
+└── main.html (OPT user)
     ├── index.html (OPT recent_cards: list, view_cards, view_cards_pages_count, view_cards_current_page)
     ├── search.html (view_cards, view_cards_pages_count, view_cards_current_page)
+    ├── substance.html (obj)
     └── account.html
+```
+
+JSON шаблон объекта user:
+
+```json
+{
+  ""
+}
 ```
 
 **recent_cards** - список 6 последних просмотренных в-в из сессии <br>

@@ -1,4 +1,4 @@
-{% from 'other/tools.html' import process_cards, process_notification %}
+{% from 'other/tools.html' import process_cards, process_notification, pages_row %}
 {% extends 'layouts/main.html' %}
 {% block content %}
 
@@ -13,6 +13,7 @@
 <div class="cards-category">
   <p class="cards-category-header">Новые:</p>
   {{ process_cards(view_cards) }}
+  {{ pages_row(view_cards_pages_count, view_cards_current_page) }}
 </div>
 {% endif %}
 

@@ -1,6 +1,5 @@
 <!-- ! TODO -->
-{% macro process_notification(items) %}
-{% for item in items %}
+{% macro process_notification(items) %} {% for item in items %}
 <div class="tool-notification">
   <div class="tool-notification-container tool-notification-{{ item.class }}">
     <h3 class="tool-notification-h tool-notification-h-{{ item.class }}">
@@ -9,8 +8,7 @@
     <p class="tool-notification-content">{{ item.text }}</p>
   </div>
 </div>
-{% endfor %}
-{% endmacro %}
+{% endfor %} {% endmacro %}
 <!-- PROCESS_CARDS -->
 {% macro process_cards(items) %}
 <div class="tool-cards">
@@ -25,7 +23,7 @@
     <p class="tool-cards-item-extra">{{ item.name_iupac }}</p>
     <p class="tool-cards-item-extra">Масса: {{ item.mass }}</p>
     <img
-      src="{{ url_for('static', filename='images/ui/' + ('heart-red.png' if item.liked == 'true' else 'heart-empty.png')) }}"
+      src="{{ url_for('static', filename='images/ui/' + ('heart-red.png' if item.liked == 'true' else 'heart-empty-dark.png')) }}"
       alt=""
       class="tool-cards-item-like"
       data-id="{{ item.id }}"
@@ -33,5 +31,41 @@
     />
   </div>
   {% endfor %}
+</div>
+{% endmacro %}
+<!-- PAGES_ROW -->
+{% macro pages_row(pages_count, current_page) %}
+<div class="tool-pages-row">
+  {% if current_page != 1 %} {% if current_page - 2 > 1 %}
+  <a href="/" class="tool-pages-row-item-empty"><<</a>
+  {% endif %}
+  <a
+    href="{{ '/?page=' ~ (current_page - 1) if current_page - 1 != 1 else '/' }}"
+    class="tool-pages-row-item-empty tool-pages-row-item-"
+    ><</a
+  >
+  {% endif %} {% if current_page - 2 > 1 %}
+  <div class="tool-pages-row-item-empty">...</div>
+  {% endif %} {% for n in range(current_page - 2 if current_page - 2 > 0 else 1,
+  current_page + 3 if current_page + 2 < pages_count else pages_count + 1) %} {%
+  if n == current_page %}
+  <div class="tool-pages-row-item-empty tool-pages-row-item active">
+    {{ n }}
+  </div>
+  {% else %}
+  <a
+    href="{{ '/?page=' ~ n if n != 1 else '/' }}"
+    class="tool-pages-row-item-empty tool-pages-row-item"
+    >{{ n }}</a
+  >
+  {% endif %} {% endfor %} {% if current_page + 2 < pages_count %}
+  <div class="tool-pages-row-item-empty">...</div>
+  {% endif %} {% if current_page != pages_count %}
+  <a href="/?page={{ current_page + 1 }}" class="tool-pages-row-item-empty"
+    >></a
+  >
+  {% if current_page + 2 < pages_count %}
+  <a href="/?page={{ pages_count }}" class="tool-pages-row-item-empty">>></a>
+  {% endif %} {% endif %}
 </div>
 {% endmacro %}
