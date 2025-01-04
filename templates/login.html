@@ -1,7 +1,7 @@
 {% extends 'layouts/login_register.html' %}
 {% block title %}Вход{% endblock %}
 {% block content %}
-
+<!-- TODO README -->
 {% if error is defined %}
 
 {% if error == 2 %}
@@ -41,7 +41,7 @@
 
 {% endif %}
 
-{% endblock %}
-{% block after_content %}
+<button type="submit" class="layout-main-form-submit">Вход</button>
+
 <a href="/register/" class="layout-main-form-label layout-main-form-other">Регистрация</a>
 {% endblock %}

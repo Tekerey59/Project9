@@ -9,10 +9,12 @@
 </div>
 {% endif %}
 
+{% if view_cards is defined %}
 <div class="cards-category">
   <p class="cards-category-header">Новые:</p>
   {{ process_cards(view_cards) }}
 </div>
+{% endif %}
 
 {% if notifications is defined %}
 {{ process_notification(notifications) }}

@@ -34,8 +34,6 @@
       <h3 class="layout-main-header">{% block title %}{% endblock %}</h3>
       <form action="" method="post" class="layout-main-form">
         {% block content %}{% endblock %}
-        <button type="submit" class="layout-main-form-submit">Отправить</button>
-        {% block after_content %}{% endblock %}
       </form>
     </section>
     <script src="{{ url_for('static', filename='js/login_register.js') }}"></script>
