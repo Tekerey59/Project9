@@ -6,3 +6,6 @@ $("#layout-header-search-input").on("keydown", (e) => {
         location.href = "/search/?q=" + $(e.currentTarget).val()
     }
 })
+$("#layout-header-search-button-advanced").on("click", () => {
+    $(".layout-header-search-advanced").toggleClass("active")
+})

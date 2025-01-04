@@ -37,7 +37,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
         # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
         return render_template(
             "index.html",
-            recent_cards=[
+            _recent_cards=[ #!______________________________________ TODO remove
                 {
                     "id": "1",
                     "name": "Этилбензол",
@@ -79,7 +79,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     "liked": "true",
                 }
             ],
-            view_cards=[
+            _view_cards=[ #!______________________________________ TODO remove
                 {
                     "id": "1",
                     "name": "Этилбензол",

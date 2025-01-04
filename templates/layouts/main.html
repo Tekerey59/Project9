@@ -55,58 +55,39 @@
           </button>
           <button
             class="layout-header-search-button empty-button"
-            id="layout-header-search-button-send"
+            id="layout-header-search-button-advanced"
           >
             <img
-              src="{{ url_for('static', filename='images/ui/search.png') }}"
+              src="{{ url_for('static', filename='images/ui/arrow-down.png') }}"
               alt=""
               class="layout-header-search-button-img"
             />
           </button>
+          <div class="layout-header-search-advanced active"></div>
         </div>
         <div class="layout-header-nav">
           <a href="/information/" class="layout-header-nav-link"
             >Полезная информация</a
           >
           <a href="/about/" class="layout-header-nav-link">О нас</a>
-          {% if user is defined %}
-          <a href="/like/" class="layout-header-nav-link">
-            <img
-              src="{{ url_for('static', filename='images/ui/heart.png') }}"
-              alt=""
-              class="layout-header-nav-link-like-img"
-            />
-          </a>
-          <a href="/account/" class="layout-header-nav-link">
-            <img
-              src="{{ url_for('static', filename='images/ui/profile-user.png') }}"
-              alt=""
-              class="layout-header-nav-link-account-img"
-            />
-          </a>
-          {% else %}
-          <a
-            href="/register/"
-            class="layout-header-nav-link layout-header-nav-link-register"
-            >Регистрация</a
-          >
-          <a
-            href="/login/"
-            class="layout-header-nav-link layout-header-nav-link-login"
-            >Вход</a
-          >
-          {% endif %}
         </div>
       </div>
     </header>
     <section class="layout-main">
       <div class="layout-main-sidebar">
         <div class="layout-main-sidebar-top"></div>
-        <div class="layout-main-sidebar-bottom"></div>
+        <div class="layout-main-sidebar-bottom">
+          <a
+            href="/{% if user is defined %}account{% else %}login{% endif %}/"
+            class="layout-main-sidebar-button"
+            ><img
+              src="{{ url_for('static', filename='images/ui/user.png') }}"
+              alt=""
+              class="layout-main-sidebar-button-img"
+          /></a>
+        </div>
       </div>
-      <div class="layout-main-container">
-        {% block content %}{% endblock %}
-      </div>
+      <div class="layout-main-container">{% block content %}{% endblock %}</div>
     </section>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
