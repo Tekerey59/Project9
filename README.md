@@ -62,28 +62,34 @@ _**ТАБЛИЦА likes:**_
 _**GET:**_
 
 - **/**
-  - ?page=int (по умолчанию - 1) <br>
+  - ?p=int (по умолчанию - 1) <br>
   <p>
   На странице показываются карточки с веществами. 2 категории: последние просмотренные, новые добавленные (в бд).
   Недавно просмотренные: последние 6
   Новые: последние 20 из БД с отступом в 20*(page-1) строк<br>
   Шаблон: index.html<br>
-  Параметры шаблона: recent_cards(list), view_cards(list), view_cards_pages_count(int), view_cards_current_page: **page**
+  Параметры шаблона: recent_cards(list), view_cards(list), view_cards_pages_count(int)
   </p>
-- **/.id./**
+- **/substance/.id./**
   <p>
   Страница в-ва. Его характеристики, синтезы, в которых он участвует. Синтезы в следующем порядке: сначала синтез его, затем в которых участвует<br>
   Шаблон: substance.html<br>
   Параметры шаблона: substance(obj)
   </p>
+- **/synthesis/.id./**
+  <p>
+  Страница синтеза<br>
+  Шаблон: synthesis.html<br>
+  Параметры шаблона: synthesis(obj)
+  </p>
 - **/search/**
   - ?q=text - запрос
   - ?type=1|2 - вещество|синтез
-  - ?page=int (по умолчанию - 1) <br>
+  - ?p=int (по умолчанию - 1) <br>
   <p>
   На странице показываются карточки с веществами, найденные по запросу из бд с отступом в 20*(page-1) строк<br>
   Шаблон: search.html<br>
-  Параметры шаблона: view_cards(list), view_cards_pages_count(int), view_cards_current_page(**page**)
+  Параметры шаблона: search_cards(list), search_cards_pages_count(int)
   </p>
 - **/login/** <br>
   <p>
@@ -131,9 +137,9 @@ OPT - опционально (про параметр)
 │   └── register.html (OPT register_error)
 │
 └── main.html (OPT user)
-    ├── index.html (OPT recent_cards: list, view_cards, view_cards_pages_count, view_cards_current_page)
-    ├── search.html (view_cards, view_cards_pages_count, view_cards_current_page)
-    ├── substance.html (obj)
+    ├── index.html (OPT recent_cards: list, view_cards, view_cards_pages_count)
+    ├── search.html (search_cards, search_cards_pages_count)
+    ├── substance.html (substance)
     └── account.html
 ```
 

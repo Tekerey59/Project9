@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+import re
 import sqlite3 as sq
 import time
 import hashlib as h
@@ -22,6 +23,18 @@ with sq.connect("base.db", check_same_thread=False) as con:
         ).hexdigest()
 
     # * _____________________________________________
+    # *
+    # *                 CUSTOM FILTERS
+    # * _____________________________________________
+
+    @app.template_filter("regex_replace")
+    def regex_replace(s, find, replace):
+        return re.sub(find, replace, s)
+
+    # Register the filter
+    app.jinja_env.filters["regex_replace"] = regex_replace
+
+    # * _____________________________________________
     # * _____________________________________________
     # * _____________________________________________
     # * _____________________________________________
@@ -37,11 +50,12 @@ with sq.connect("base.db", check_same_thread=False) as con:
         # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
         return render_template(
             "index.html",
-            recent_cards=[ #!______________________________________ TODO remove
+            recent_cards=[  #!______________________________________ TODO remove
                 {
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
                     "liked": "true",
                 },
@@ -49,12 +63,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },{
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
                     "liked": "true",
                 },
@@ -62,28 +71,41 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
-                    "liked": "false",
+                    "liked": "true",
                 },
                 {
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
-                    "liked": "false",
-                },{
+                    "liked": "true",
+                },
+                {
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
                     "liked": "true",
-                }
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
             ],
-            view_cards=[ #!______________________________________ TODO remove
+            view_cards=[  #!______________________________________ TODO remove
                 {
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
                     "liked": "true",
                 },
@@ -91,12 +113,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },{
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
                     "liked": "true",
                 },
@@ -104,12 +121,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },{
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
                     "liked": "true",
                 },
@@ -117,12 +129,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
-                    "mass": 106.165,
-                    "liked": "false",
-                },{
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
                     "liked": "true",
                 },
@@ -130,12 +137,52 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     "id": "1",
                     "name": "Этилбензол",
                     "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
                     "mass": 106.165,
-                    "liked": "false",
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
                 },
             ],
             view_cards_pages_count=10,
-            view_cards_current_page=1,
         )
 
     # АККАУНТ
@@ -176,9 +223,94 @@ with sq.connect("base.db", check_same_thread=False) as con:
         return render_template("chem_ed", id, err=False)
 
     @app.route("/search/")
-    def get_search(id):
+    def get_search():
         # COMING SOON
-        return render_template()
+        return render_template(
+            "search.html",
+            search_cards=[
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+                {
+                    "id": "1",
+                    "name": "Этилбензол",
+                    "name_iupac": "Этилбензол",
+                    "formula": "C8H10",
+                    "mass": 106.165,
+                    "liked": "true",
+                },
+            ],
+            search_cards_pages_count=10,
+        )
 
     @app.route("/like/")
     def get_like(id):
