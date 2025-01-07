@@ -21,16 +21,16 @@
 
 <label class="layout-main-form-label">Придумайте пароль:</label>
 <div class="layout-main-form-input-container {% if register_error in [2, 3] %}layout-main-form-input-error{% endif %}">
-  <input name="password_first" type="password" placeholder="########" class="layout-main-form-input-container-input layout-main-form-input-show_hide empty-input">
+  <input name="password" type="password" placeholder="########" class="layout-main-form-input-container-input layout-main-form-input-show_hide empty-input">
   <button class="layout-main-form-input-container-button layout-main-form-input-button-show_hide empty-button">
-    <img src="{{ url_for('static', filename='images/ui/show.png') }}" alt="" class="layout-main-form-input-container-button-img layout-main-form-input-show_hide-img">
+    <img src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/show.png') }}" alt="" class="layout-main-form-input-container-button-img layout-main-form-input-show_hide-img">
   </button>
 </div>
 <label class="layout-main-form-label">Повторите пароль:</label>
 <div class="layout-main-form-input-container {% if register_error in [2, 3] %}layout-main-form-input-error{% endif %}">
-  <input name="password_second" type="password" placeholder="########" class="layout-main-form-input-container-input layout-main-form-input-show_hide empty-input">
+  <input name="password_confirm" type="password" placeholder="########" class="layout-main-form-input-container-input layout-main-form-input-show_hide empty-input">
   <button class="layout-main-form-input-container-button layout-main-form-input-button-show_hide empty-button">
-    <img src="{{ url_for('static', filename='images/ui/show.png') }}" alt="" class="layout-main-form-input-container-button-img layout-main-form-input-show_hide-img">
+    <img src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/show.png') }}" alt="" class="layout-main-form-input-container-button-img layout-main-form-input-show_hide-img">
   </button>
 </div>
 

@@ -3,14 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ APP_NAME }}{% if user is defined %}- Вход выполнен{% endif %}</title>
+    <title>
+      {{ APP_NAME }}{% if user is defined %}- Вход выполнен{% endif %}
+    </title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/normalize.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/vars.css') }}"
     />
     <link
       rel="stylesheet"
@@ -28,9 +26,20 @@
       rel="stylesheet"
     />
     <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+    {% set THEME = THEME if THEME is defined else "default" %}
+    <!--  -->
+    {% set THEME_TYPE = THEME_TYPE if THEME_TYPE is defined else "dark" %}
+    <script>
+      THEME_TYPE = "{{ THEME_TYPE }}";
+    </script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='themes/' ~ THEME ~ '-' ~ THEME_TYPE ~ '.css') }}"
+    />
   </head>
 
   <body class="root">
+    <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
     <header class="layout-header">
       <div class="layout-header-container">
         <a href="/">
@@ -48,7 +57,7 @@
             id="layout-header-search-button-clear"
           >
             <img
-              src="{{ url_for('static', filename='images/ui/x.png') }}"
+              src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/x.png') }}"
               alt=""
               class="layout-header-search-button-img"
             />
@@ -58,7 +67,7 @@
             id="layout-header-search-button-advanced"
           >
             <img
-              src="{{ url_for('static', filename='images/ui/arrow-down.png') }}"
+              src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/arrow-down.png') }}"
               alt=""
               class="layout-header-search-button-img"
             />
@@ -66,9 +75,6 @@
           <div class="layout-header-search-advanced"></div>
         </div>
         <div class="layout-header-nav">
-          <a href="/information/" class="layout-header-nav-link"
-            >Полезная информация</a
-          >
           <a href="/about/" class="layout-header-nav-link">О нас</a>
         </div>
       </div>
@@ -81,7 +87,7 @@
             href="/{% if user is defined %}account{% else %}login{% endif %}/"
             class="layout-main-sidebar-button"
             ><img
-              src="{{ url_for('static', filename='images/ui/user.png') }}"
+              src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/user.png') }}"
               alt=""
               class="layout-main-sidebar-button-img"
           /></a>
@@ -89,7 +95,6 @@
       </div>
       <div class="layout-main-container">{% block content %}{% endblock %}</div>
     </section>
-    <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

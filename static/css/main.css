@@ -104,6 +104,7 @@
   border-left: 1px solid var(--color-sec);
 }
 .layout-header-search-advanced {
+  z-index: 1;
   transition: var(--transition);
   position: absolute;
   top: 50px;
@@ -126,12 +127,16 @@
 .layout-header-nav {
   height: auto;
   width: auto;
+  margin: 0 30px 0 0;
   display: flex;
   align-items: center;
   color: var(--color-sec);
 }
 .layout-header-nav-link {
   width: min-content;
+  padding: 10px;
+  border: 1px solid var(--color-sec);
+  border-radius: 10px;
   white-space: nowrap;
   transition: var(--transition);
 }

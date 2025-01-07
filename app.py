@@ -380,8 +380,8 @@ with sq.connect("base.db", check_same_thread=False) as con:
     def post_register():
         name1 = request.form["name"]
         email1 = request.form["email"]
-        password_first1 = request.form["password_first"]
-        password_second1 = request.form["password_second"]
+        password_first1 = request.form["password"]
+        password_second1 = request.form["password_confirm"]
         if password_first1 == password_second1:
             created_datatime1 = time.time()
             updated_datatime1 = created_datatime1

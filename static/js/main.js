@@ -9,10 +9,3 @@ $("#layout-header-search-input").on("keydown", (e) => {
 $("#layout-header-search-button-advanced").on("click", () => {
   $(".layout-header-search-advanced").toggleClass("active");
 });
-
-$.preloadImages(
-  "/static/images/ui/heart-red.png",
-  "/static/images/ui/heart-empty-dark.png"
-);
-$(window).on("resize", cards_resize);
-cards_resize();

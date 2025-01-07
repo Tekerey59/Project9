@@ -24,9 +24,14 @@
       rel="stylesheet"
     />
     <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+    {% set THEME_TYPE = THEME_TYPE if THEME_TYPE is defined else "dark" %}
+    <script>
+      THEME_TYPE = "{{ THEME_TYPE }}";
+    </script>
   </head>
 
   <body class="root">
+    <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
     <section class="layout-main">
       <a href="/">
         <div class="layout-main-icon">⌬</div>
@@ -36,7 +41,6 @@
         {% block content %}{% endblock %}
       </form>
     </section>
-    <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
     <script src="{{ url_for('static', filename='js/login_register.js') }}"></script>
   </body>
 </html>

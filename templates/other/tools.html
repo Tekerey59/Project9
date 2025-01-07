@@ -24,7 +24,7 @@
     <p class="tool-cards-item-extra">Формула: {{ item.formula }}</p>
     <p class="tool-cards-item-extra">Масса: {{ item.mass }}</p>
     <img
-      src="{{ url_for('static', filename='images/ui/' + ('heart-red.png' if item.liked == 'true' else 'heart-empty-dark.png')) }}"
+      src="{{ url_for('static', filename='images/ui/' + ('heart-red.png' if item.liked == 'true' else 'heart-empty.png')) }}"
       alt=""
       class="tool-cards-item-like"
       data-id="{{ item.id }}"
@@ -39,7 +39,6 @@
 <div class="tool-pages-row">
   {% set current_page = (request.args.get("p")|int if request.args.get("p")|int > 0 else 1) %}
   {% set url_params = request.query_string.decode()|regex_replace("[?&]*p=([^&#=]*)[&]*", "") %}
-  {{url_params}}
   {% set url = request.path ~ "?" ~ ("p=" if url_params == "" else url_params ~ "&p=") %}
   {% if current_page != 1 %}
   <!--  -->

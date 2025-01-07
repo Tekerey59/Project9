@@ -1,24 +1,20 @@
-{% from 'other/tools.html' import process_cards, process_notification, pages_row %}
-{% extends 'layouts/main.html' %}
-{% block content %}
-
-{% if recent_cards is defined %}
+{% from 'other/tools.html' import process_cards, process_notification, pages_row
+%} {% extends 'layouts/main.html' %} {% block content %} {% if recent_cards is
+defined %}
 <div class="cards-category">
   <p class="cards-category-header">Недавно просмотренные:</p>
   {{ process_cards(recent_cards) }}
 </div>
-{% endif %}
-
-{% if view_cards is defined %}
+{% endif %} {% if view_cards is defined %}
 <div class="cards-category">
   <p class="cards-category-header">Новые:</p>
-  {{ process_cards(view_cards) }}
-  {{ pages_row(view_cards_pages_count) }}
+  {{ process_cards(view_cards) }} {{ pages_row(view_cards_pages_count) }}
 </div>
 {% endif %}
 
-{% if notifications is defined %}
-{{ process_notification(notifications) }}
-{% endif %}
+<script>
+  cards_init();
+</script>
 
-{% endblock %}
+{% if notifications is defined %} {{ process_notification(notifications) }} {%
+endif %} {% endblock %}
