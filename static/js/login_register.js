@@ -20,3 +20,7 @@ $(".layout-main-form-input-error").on("click", (e) => {
   $(e.currentTarget).off("click");
   $(".layout-main-form-error").remove();
 });
+$.preloadImages(
+  "/static/images/ui/hide.png",
+  "/static/images/ui/show.png"
+);

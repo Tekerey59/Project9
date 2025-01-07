@@ -38,8 +38,9 @@
 {% macro pages_row(pages_count) %}
 <div class="tool-pages-row">
   {% set current_page = (request.args.get("p")|int if request.args.get("p")|int > 0 else 1) %}
-  {% set url_params = request.query_string.decode()|regex_replace("([?&]p=([^&]+)|&p=$)", "") %}
-  {% set url = request.path ~ "?" ~ (url_params ~ "&p=" if url_params != "" else "p=") %}
+  {% set url_params = request.query_string.decode()|regex_replace("[?&]*p=([^&#=]*)[&]*", "") %}
+  {{url_params}}
+  {% set url = request.path ~ "?" ~ ("p=" if url_params == "" else url_params ~ "&p=") %}
   {% if current_page != 1 %}
   <!--  -->
   {% if current_page - 2 > 1 %}
