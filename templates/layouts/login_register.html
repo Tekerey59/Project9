@@ -10,10 +10,6 @@
     />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/vars.css') }}"
-    />
-    <link
-      rel="stylesheet"
       href="{{ url_for('static', filename='css/login_register.css') }}"
     />
 
@@ -24,10 +20,16 @@
       rel="stylesheet"
     />
     <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+    {% set THEME = THEME if THEME is defined else "default" %}
+    <!--  -->
     {% set THEME_TYPE = THEME_TYPE if THEME_TYPE is defined else "dark" %}
     <script>
       THEME_TYPE = "{{ THEME_TYPE }}";
     </script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='themes/' ~ THEME ~ '-' ~ THEME_TYPE ~ '.css') }}"
+    />
   </head>
 
   <body class="root">

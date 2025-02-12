@@ -1,13 +1,12 @@
-from flask import Flask
-from flask import render_template
-from flask import request
+from flask import Flask, render_template, request, session
 import re
 import sqlite3 as sq
 import time
 import hashlib as h
+import json
 
 app = Flask("Suite")
-
+app.config['SECRET_KEY'] = '^HJb_mTQ]&0kTg8M$Q3xqUMoslBZ_!'
 
 with sq.connect("base.db", check_same_thread=False) as con:
     cur = con.cursor()
@@ -22,6 +21,20 @@ with sq.connect("base.db", check_same_thread=False) as con:
             ).digest()
         ).hexdigest()
 
+    def ses():
+        global session
+        if 'logged' in session:
+            print('\n')
+            print(session['logged'])
+            print('\n')
+            return session['logged']
+        else:
+            session['logged'] = False
+            print('\n')
+            print(session['logged'])
+            print('\n')
+            return False
+    
     # * _____________________________________________
     # *
     # *                 CUSTOM FILTERS
@@ -48,157 +61,40 @@ with sq.connect("base.db", check_same_thread=False) as con:
     @app.route("/")
     def get_index():
         # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
+        
+        cur.execute("""SELECT characteristics FROM substances WHERE id == 1""")
+        characteristics_data = json.loads(cur.fetchone()[0])
         return render_template(
             "index.html",
             recent_cards=[  #!______________________________________ TODO remove
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
+                characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, 
             ],
             view_cards=[  #!______________________________________ TODO remove
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
+              characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, 
             ],
             view_cards_pages_count=10,
         )
 
     # АККАУНТ
 
-    @app.route("/login/")
-    def get_login():
-        return render_template("login.html")
-
     @app.route("/register/")
     def get_register():
-        return render_template("register.html")
+        if ses():
+            return render_template('account.html')
+        else:
+            return render_template('register.html')
+    
+    @app.route("/login/")
+    def get_login():
+        if ses():
+            return render_template('account.html')
+        else:
+            return render_template('login.html')
 
     @app.route("/account/")
     def get_account():
         # COMING SOON
-        return render_template("acc")
+        return render_template("account.html")
 
     @app.route("/account/edit/")
     def get_account_edit():
@@ -224,90 +120,13 @@ with sq.connect("base.db", check_same_thread=False) as con:
 
     @app.route("/search/")
     def get_search():
-        # COMING SOON
+        cur.execute("""SELECT characteristics FROM substances WHERE id == 1""")
+        characteristics_data = json.loads(cur.fetchone()[0])
+
         return render_template(
             "search.html",
             search_cards=[
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
-                {
-                    "id": "1",
-                    "name": "Этилбензол",
-                    "name_iupac": "Этилбензол",
-                    "formula": "C8H10",
-                    "mass": 106.165,
-                    "liked": "true",
-                },
+                characteristics_data, characteristics_data, characteristics_data, characteristics_data
             ],
             search_cards_pages_count=10,
         )
@@ -386,30 +205,36 @@ with sq.connect("base.db", check_same_thread=False) as con:
             created_datatime1 = time.time()
             updated_datatime1 = created_datatime1
             try:
-                print("tryyy")
                 psswd_hashed = str(hash(password_second1, email1))
-                print(psswd_hashed)
                 cur.execute(
                     f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime1}', '{updated_datatime1}')"""
                 )
                 con.commit()
+                session['logged'] = True
                 return render_template("index.html")
             except Exception as err:
-                return render_template("register.html", error=0)
+                return render_template("register.html", register_error=0)
         else:
             return render_template("register.html", register_error=2)
 
     @app.route("/login/", methods=["POST"])
     def post_login():
-        email1 = request.form["email"]
-        password1 = hash(request.form["password"], email1)
-        print(password1)
-        cur.execute(
-            f"""SELECT id FROM users WHERE email == '{email1}' AND password == '{password1}'"""
-        )
-        if cur.fetchone() != None:
-            return render_template("index.html")
+        if not ses():
+            try:
+                email1 = request.form["email"]
+                password1 = hash(request.form["password"], email1)
+                cur.execute(
+                    f"""SELECT id FROM users WHERE email == '{email1}' AND password == '{password1}'"""
+                )
+                if cur.fetchone() != None:
+                    session['logged'] = True
+                    print('Logged! ')
+                    return render_template("index.html")
+                else:
+                    return render_template("login.html", login_error=2)
+            except:
+                return render_template("login.html", login_error=0)
         else:
-            return render_template("login.html", login_error=2)
+            return render_template('account.html')
 
     app.run(debug=True)
