@@ -15,36 +15,46 @@ let cards_resize = () => {
     blocks < 4 ? blocks * 300 + (blocks - 1) * 10 : 1240
   );
 };
-let cards_set_like = (id, state) => {
+let cards_set_like = (id, liked) => {
   let element = $(`.tool-cards-item[data-id="${id}"] > .tool-cards-item-like`);
-  if (state) {
+  if (liked) {
     element.attr("src", get_icon("heart-red", false));
   } else {
     element.attr("src", get_icon("heart-empty", false));
   }
-  element.attr("data-state", state);
+  $(`.tool-cards-item[data-id="${id}"]`).attr("data-liked", liked);
 };
 let cards_init = () => {
   $(".tool-cards-item-like").on("click", (e) => {
-    let id = $(e.currentTarget).attr("data-id");
-    let state = $(e.currentTarget).attr("data-state") == "true";
-    cards_set_like(id, !state);
+    let element = $(e.currentTarget).parents(".tool-cards-item");
+    let id = element.attr("data-id");
+    let type = element.attr("data-type");
+    let liked = element.attr("data-liked") == "true";
+
+    cards_set_like(id, !liked);
+
     $.ajax({
-      url: `/substance/${id}/like`,
+      url: `/${type}/${id}/like`,
       method: "post",
       dataType: "json",
-      data: { state: !state },
+      data: { liked: !liked },
       success: (data) => {
-        cards_set_like(id, data["state"] == "true");
+        cards_set_like(id, data["liked"] == "true");
       },
     });
   });
   $(".tool-cards-item").on("mouseup", (e) => {
     if (
+      e.button == 0 &&
       !document.getSelection().toString() &&
-      !$(e.target).attr("data-state")
+      !$(e.target).hasClass("tool-cards-item-like")
     ) {
-      location.href = "/" + $(e.currentTarget).attr("data-id") + "/";
+      location.href =
+        "/" +
+        $(e.currentTarget).attr("data-type") +
+        "/" +
+        $(e.currentTarget).attr("data-id") +
+        "/";
     }
   });
   $.preloadImages(get_icon("heart-red", false), get_icon("heart-empty", false));

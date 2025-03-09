@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, redirect, request, session
 import re
 import sqlite3 as sq
 import time
@@ -6,7 +6,7 @@ import hashlib as h
 import json
 
 app = Flask("Suite")
-app.config['SECRET_KEY'] = '^HJb_mTQ]&0kTg8M$Q3xqUMoslBZ_!'
+app.config['SECRET_KEY'] = '^HJb_mTQ]&0kTg8M$Q3xqUMoslBZ_!' # TODO: random bytes
 
 with sq.connect("base.db", check_same_thread=False) as con:
     cur = con.cursor()
@@ -37,7 +37,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
     
     # * _____________________________________________
     # *
-    # *                 CUSTOM FILTERS
+    # *                 CUSTOM
     # * _____________________________________________
 
     @app.template_filter("regex_replace")
@@ -46,6 +46,10 @@ with sq.connect("base.db", check_same_thread=False) as con:
 
     # Register the filter
     app.jinja_env.filters["regex_replace"] = regex_replace
+
+    @app.context_processor
+    def global_variables():
+        return {'APP_NAME': 'ИМЯ_ПРИЛОЖЕНИЯ', 'THEME': 'default', 'THEME_TYPE': 'dark'}
 
     # * _____________________________________________
     # * _____________________________________________
@@ -73,6 +77,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
               characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, 
             ],
             view_cards_pages_count=10,
+            
         )
 
     # АККАУНТ
@@ -80,21 +85,23 @@ with sq.connect("base.db", check_same_thread=False) as con:
     @app.route("/register/")
     def get_register():
         if ses():
-            return render_template('account.html')
+            return redirect("/account/")
         else:
             return render_template('register.html')
     
     @app.route("/login/")
     def get_login():
         if ses():
-            return render_template('account.html')
+            return redirect("/account/")
         else:
             return render_template('login.html')
 
     @app.route("/account/")
     def get_account():
-        # COMING SOON
-        return render_template("account.html")
+        if ses():
+            return render_template('account.html')
+        else:
+            return redirect('/login/')
 
     @app.route("/account/edit/")
     def get_account_edit():
@@ -202,12 +209,12 @@ with sq.connect("base.db", check_same_thread=False) as con:
         password_first1 = request.form["password"]
         password_second1 = request.form["password_confirm"]
         if password_first1 == password_second1:
-            created_datatime1 = time.time()
-            updated_datatime1 = created_datatime1
+            created_datatime = time.time()
+            updated_datatime = created_datatime
             try:
                 psswd_hashed = str(hash(password_second1, email1))
                 cur.execute(
-                    f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime1}', '{updated_datatime1}')"""
+                    f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime}', '{updated_datatime}')"""
                 )
                 con.commit()
                 session['logged'] = True

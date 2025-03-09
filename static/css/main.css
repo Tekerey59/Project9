@@ -15,7 +15,7 @@
   height: 80px;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   background: linear-gradient(
       0.25turn,
       var(--color-primary),
@@ -57,7 +57,6 @@
 
 .layout-header-search {
   position: relative;
-  height: auto;
   width: 100%;
   max-width: 600px;
   display: flex;
@@ -105,6 +104,7 @@
 }
 .layout-header-search-advanced {
   z-index: 1;
+  overflow: hidden;
   transition: var(--transition);
   position: absolute;
   top: 50px;
@@ -123,10 +123,32 @@
 .layout-header-search:has(> .layout-header-search-advanced.active) {
   border-radius: 10px 10px 0 0;
 }
+.layout-header-search-advanced-tabs {
+  overflow: hidden;
+  height: 34px;
+  width: min-content;
+  margin: 10px;
+  display: flex;
+  border: 1px solid var(--color-sec);
+  border-radius: 5px;
+}
+.layout-header-search-advanced-tabs-item {
+  transition: var(--transition);
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--color-sec);
+  padding: 0 10px;
+}
+.layout-header-search-advanced-tabs-item:first-child {
+  border-right: 1px solid var(--color-sec);
+}
+.layout-header-search-advanced-tabs-item.active {
+  background: var(--color-primary);
+}
 
 .layout-header-nav {
-  height: auto;
-  width: auto;
   margin: 0 30px 0 0;
   display: flex;
   align-items: center;
@@ -171,16 +193,18 @@
   flex-direction: column;
   align-items: center;
 }
+.layout-main-sidebar-button:hover {
+  background: var();
+}
 .layout-main-sidebar-top > .layout-main-sidebar-button {
-  margin: 12px 0 0 0;
+  margin: 16px 0 0 0;
 }
 .layout-main-sidebar-bottom > .layout-main-sidebar-button {
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
 }
-.layout-main-sidebar-button,
-.layout-main-sidebar-button-img {
-  height: 40px;
-  width: 40px;
+.layout-main-sidebar-button > .layout-main-sidebar-button-img {
+  height: 100%;
+  width: 100%;
 }
 
 .layout-main-container {
@@ -249,7 +273,6 @@
 }
 
 .cards-category {
-  height: auto;
   width: 100%;
   margin: 0 0 20px 0;
   display: flex;
@@ -311,7 +334,6 @@
 
 .tool-pages-row {
   height: 50px;
-  width: auto;
   margin: 20px 0 0 0;
   display: flex;
   align-items: center;

@@ -1,4 +1,19 @@
-DROP TABLE IF EXISTS substances;
+DROP TABLE IF EXISTS "users";
+DROP TABLE IF EXISTS "syntheses";
+DROP TABLE IF EXISTS "likes";
+DROP TABLE IF EXISTS "substances";
+
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+-- *
+-- *                 TABLES
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -14,9 +29,10 @@ CREATE TABLE IF NOT EXISTS substances (
     name TEXT NOT NULL,
     name_iupac TEXT NOT NULL,
     bruto_formula TEXT NOT NULL,
-    characteristics NVARCHAR(1024),
+    mass FLOAT NOT NULL,
+    characteristics JSON,
     sources JSON,
-    author INTEGER,
+    author_id INTEGER,
     created_datatime TEXT,
     updated_datatime TEXT,
     admin_confirmed BOOLEAN
@@ -43,21 +59,34 @@ CREATE TABLE IF NOT EXISTS likes (
     created_datatime TEXT
 );
 
-INSERT INTO substances (name, name_iupac, bruto_formula, characteristics, sources, author, created_datatime, updated_datatime, admin_confirmed) VALUES (
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+-- *
+-- *                 VALUES
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+-- * _____________________________________________
+
+INSERT INTO substances (name, name_iupac, bruto_formula, mass, characteristics, sources, author_id, created_datatime, updated_datatime, admin_confirmed) VALUES (
     'Этилбензол',
     'Этилбензол',
     'C8H10',
+    106.165,
     '{
         "id": "1",
         "name": "Этилбензол",
         "name_iupac": "Этилбензол",
         "formula": "C8H10",
         "mass": "106.165",
+        "type": "substance",
         "liked": "true"
     }',
-    '{}',
-    0,
+    '[]',
+    1,
     '0',
     '0',
-    True
-)
+    1
+);

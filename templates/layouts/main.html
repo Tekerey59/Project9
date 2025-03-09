@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      {{ APP_NAME }}{% if user is defined %}- Вход выполнен{% endif %}
+      {% block title %}{{ APP_NAME }}{% if user is defined %} - Вход выполнен{%
+      endif %}{% endblock %}{% block title_extra %}{% endblock %}
     </title>
     <link
       rel="stylesheet"
@@ -26,9 +27,6 @@
       rel="stylesheet"
     />
     <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
-    {% set THEME = THEME if THEME is defined else "default" %}
-    <!--  -->
-    {% set THEME_TYPE = THEME_TYPE if THEME_TYPE is defined else "dark" %}
     <script>
       THEME_TYPE = "{{ THEME_TYPE }}";
     </script>
@@ -72,7 +70,14 @@
               class="layout-header-search-button-img"
             />
           </button>
-          <div class="layout-header-search-advanced"></div>
+          <div class="layout-header-search-advanced">
+            <div class="layout-header-search-advanced-tabs">
+              <div class="layout-header-search-advanced-tabs-item active" data-type="0">Вещество</div>
+              <div class="layout-header-search-advanced-tabs-item" data-type="1">Синтез</div>
+            </div>
+            <div class="layout-header-search-advanced-tab active" data-type="0"></div>
+            <div class="layout-header-search-advanced-tab" data-type="1"></div>
+          </div>
         </div>
         <div class="layout-header-nav">
           <a href="/about/" class="layout-header-nav-link">О нас</a>
@@ -83,9 +88,24 @@
       <div class="layout-main-sidebar">
         <div class="layout-main-sidebar-top"></div>
         <div class="layout-main-sidebar-bottom">
+          <div class="layout-main-sidebar-button" style="height: 30px">
+            <img
+              src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/heart.png') }}"
+              alt=""
+              class="layout-main-sidebar-button-img"
+            />
+          </div>
+          <div class="layout-main-sidebar-button" style="height: 30px">
+            <img
+              src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/palete.png') }}"
+              alt=""
+              class="layout-main-sidebar-button-img"
+            />
+          </div>
           <a
-            href="/{% if user is defined %}account{% else %}login{% endif %}/"
+            href="/account/"
             class="layout-main-sidebar-button"
+            style="height: 40px"
             ><img
               src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/user.png') }}"
               alt=""

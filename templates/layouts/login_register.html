@@ -20,9 +20,6 @@
       rel="stylesheet"
     />
     <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
-    {% set THEME = THEME if THEME is defined else "default" %}
-    <!--  -->
-    {% set THEME_TYPE = THEME_TYPE if THEME_TYPE is defined else "dark" %}
     <script>
       THEME_TYPE = "{{ THEME_TYPE }}";
     </script>
