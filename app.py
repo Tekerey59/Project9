@@ -49,7 +49,12 @@ with sq.connect("base.db", check_same_thread=False) as con:
 
     @app.context_processor
     def global_variables():
-        return {'APP_NAME': 'ИМЯ_ПРИЛОЖЕНИЯ', 'THEME': 'default', 'THEME_TYPE': 'dark'}
+        return {
+            "APP_NAME": "ИМЯ_ПРИЛОЖЕНИЯ",
+            "IsMobile": re.match("Android|Mobi|iPhone", request.headers.get("User-Agent")),
+            "THEME": "default",
+            "THEME_TYPE": "dark",
+        }
 
     # * _____________________________________________
     # * _____________________________________________
@@ -70,14 +75,14 @@ with sq.connect("base.db", check_same_thread=False) as con:
         characteristics_data = json.loads(cur.fetchone()[0])
         return render_template(
             "index.html",
-            recent_cards=[  #!______________________________________ TODO remove
+            recent_substances=[  #!______________________________________ TODO remove
                 characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, 
             ],
-            view_cards=[  #!______________________________________ TODO remove
+            view_substances=[  #!______________________________________ TODO remove
               characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, 
             ],
-            view_cards_pages_count=10,
-            
+            liked_substances=[characteristics_data],
+            view_substances_pages_count=10,
         )
 
     # АККАУНТ
@@ -132,10 +137,10 @@ with sq.connect("base.db", check_same_thread=False) as con:
 
         return render_template(
             "search.html",
-            search_cards=[
+            search_substances=[
                 characteristics_data, characteristics_data, characteristics_data, characteristics_data
             ],
-            search_cards_pages_count=10,
+            search_substances_pages_count=10,
         )
 
     @app.route("/like/")

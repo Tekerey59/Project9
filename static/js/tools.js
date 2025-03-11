@@ -15,34 +15,7 @@ let cards_resize = () => {
     blocks < 4 ? blocks * 300 + (blocks - 1) * 10 : 1240
   );
 };
-let cards_set_like = (id, liked) => {
-  let element = $(`.tool-cards-item[data-id="${id}"] > .tool-cards-item-like`);
-  if (liked) {
-    element.attr("src", get_icon("heart-red", false));
-  } else {
-    element.attr("src", get_icon("heart-empty", false));
-  }
-  $(`.tool-cards-item[data-id="${id}"]`).attr("data-liked", liked);
-};
 let cards_init = () => {
-  $(".tool-cards-item-like").on("click", (e) => {
-    let element = $(e.currentTarget).parents(".tool-cards-item");
-    let id = element.attr("data-id");
-    let type = element.attr("data-type");
-    let liked = element.attr("data-liked") == "true";
-
-    cards_set_like(id, !liked);
-
-    $.ajax({
-      url: `/${type}/${id}/like`,
-      method: "post",
-      dataType: "json",
-      data: { liked: !liked },
-      success: (data) => {
-        cards_set_like(id, data["liked"] == "true");
-      },
-    });
-  });
   $(".tool-cards-item").on("mouseup", (e) => {
     if (
       e.button == 0 &&
@@ -60,4 +33,81 @@ let cards_init = () => {
   $.preloadImages(get_icon("heart-red", false), get_icon("heart-empty", false));
   $(window).on("resize", cards_resize);
   cards_resize();
+};
+let panels_lists_init = () => {
+  $(document).on("mouseup", ".tool-panel-list-item", (e) => {
+    if (
+      e.button == 0 &&
+      !document.getSelection().toString() &&
+      !$(e.target).hasClass("tool-panel-list-item-like")
+    ) {
+      location.href =
+        "/" +
+        $(e.currentTarget).attr("data-type") +
+        "/" +
+        $(e.currentTarget).attr("data-id") +
+        "/";
+    }
+  });
+};
+let set_like = (data) => {
+  let element = $(
+    `.tool-cards-item[data-id="${data["id"]}"] > .tool-cards-item-like, .tool-panel-list-item[data-id="${data["id"]}"] > .tool-panel-list-item-like`
+  );
+  if (data["liked"]) {
+    element.attr("src", get_icon("heart-red", false));
+  } else {
+    element.attr("src", get_icon("heart-empty", false));
+  }
+  if (data["liked"]) {
+    $(`[data-panel-id="likes"] .tool-panel-list`).append(`
+      <div class="tool-panel-list-item" data-id="${data["id"]}" data-type="${data["id"]}" data-liked="true">
+        <img class="tool-panel-list-item-image" src="/static/images/structures/${data["id"]}.png" alt="">
+        <img src="/static/images/ui/heart-red.png" alt="" class="tool-panel-list-item-like">
+        <div class="tool-panel-list-item-information">
+          <div class="tool-panel-list-item-information-name">${data["name"]}</div>
+          <div class="tool-panel-list-item-information-extra">${data["name_iupac"]}</div>
+        </div>
+      </div>
+      `);
+  } else {
+    $(`[data-panel-id="likes"] .tool-panel-list`).html(
+      $.parseHTML($(`[data-panel-id="likes"] .tool-panel-list`).html()).filter(
+        (el) =>
+          el.attributes
+            ? el.attributes["data-id"].value != data["id"] &&
+              el.attributes["data-type"].value != data["type"]
+            : false
+      )
+    );
+  }
+
+  $(
+    `.tool-cards-item[data-id="${data["id"]}"], .tool-panel-list-item[data-id="${data["id"]}"]`
+  ).data("liked", data["liked"]);
+};
+let likes_init = () => {
+  $(document).on(
+    "click",
+    ".tool-panel-list-item-like, .tool-cards-item-like",
+    (e) => {
+      let data = $(e.currentTarget)
+        .parents(".tool-panel-list-item, .tool-cards-item")
+        .data();
+      set_like(
+        Object.assign(data, {
+          name_iupac: data["nameIupac"],
+          liked: !data["liked"],
+        })
+      );
+
+      $.ajax({
+        url: `/${data["type"]}/${data["id"]}/like`,
+        method: "post",
+        dataType: "json",
+        data: { liked: data["liked"] },
+        success: set_like,
+      });
+    }
+  );
 };

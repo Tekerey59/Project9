@@ -19,3 +19,21 @@ $(".layout-header-search-advanced-tabs-item").on("click", (e) => {
     )}']`
   ).addClass("active");
 });
+$(".layout-main-sidebar-button[data-panel-id]").on("click", (e) => {
+  if ($(e.currentTarget).hasClass("active")) {
+    $("[data-panel-id]").removeClass("active");
+  } else {
+    $("[data-panel-id]").removeClass("active");
+    $(e.currentTarget).addClass("active");
+    $(
+      `.layout-panel[data-panel-id="${$(e.currentTarget).attr(
+        "data-panel-id"
+      )}"]`
+    ).addClass("active");
+  }
+});
+$(".layout-panel-header-hide").on("click", (e) => {
+  $("[data-panel-id]").removeClass("active");
+});
+panels_lists_init();
+likes_init();

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from 'other/tools.html' import process_panel_list %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -72,15 +73,28 @@
           </button>
           <div class="layout-header-search-advanced">
             <div class="layout-header-search-advanced-tabs">
-              <div class="layout-header-search-advanced-tabs-item active" data-type="0">Вещество</div>
-              <div class="layout-header-search-advanced-tabs-item" data-type="1">Синтез</div>
+              <div
+                class="layout-header-search-advanced-tabs-item active"
+                data-type="0"
+              >
+                Вещество
+              </div>
+              <div
+                class="layout-header-search-advanced-tabs-item"
+                data-type="1"
+              >
+                Синтез
+              </div>
             </div>
-            <div class="layout-header-search-advanced-tab active" data-type="0"></div>
+            <div
+              class="layout-header-search-advanced-tab active"
+              data-type="0"
+            ></div>
             <div class="layout-header-search-advanced-tab" data-type="1"></div>
           </div>
         </div>
         <div class="layout-header-nav">
-          <a href="/about/" class="layout-header-nav-link">О нас</a>
+          <a href="/about/" class="layout-header-nav-link">О проекте</a>
         </div>
       </div>
     </header>
@@ -88,33 +102,119 @@
       <div class="layout-main-sidebar">
         <div class="layout-main-sidebar-top"></div>
         <div class="layout-main-sidebar-bottom">
-          <div class="layout-main-sidebar-button" style="height: 30px">
+          <div
+            class="layout-main-sidebar-button"
+            data-panel-id="history"
+            title="История"
+          >
+            <img
+              src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/history.png') }}"
+              alt=""
+              class="layout-main-sidebar-button-img"
+              style="height: 40px"
+            />
+          </div>
+          <div
+            class="layout-main-sidebar-button"
+            data-panel-id="likes"
+            title="Отмеченные"
+          >
             <img
               src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/heart.png') }}"
               alt=""
               class="layout-main-sidebar-button-img"
+              style="height: 30px"
             />
           </div>
-          <div class="layout-main-sidebar-button" style="height: 30px">
+          <div
+            class="layout-main-sidebar-button"
+            data-panel-id="theme"
+            title="Тема сайта"
+          >
             <img
               src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/palete.png') }}"
               alt=""
               class="layout-main-sidebar-button-img"
+              style="height: 30px"
             />
           </div>
-          <a
-            href="/account/"
-            class="layout-main-sidebar-button"
-            style="height: 40px"
+          <a href="/account/" class="layout-main-sidebar-button" title="Аккаунт"
             ><img
               src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/user.png') }}"
               alt=""
               class="layout-main-sidebar-button-img"
-          /></a>
+              style="height: 40px"
+            />
+          </a>
+          {% if user is defined %}
+          <a href="/account/" class="layout-main-sidebar-button" title="Аккаунт"
+            ><img
+              src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/logout.png') }}"
+              alt=""
+              class="layout-main-sidebar-button-img"
+              style="height: 30px"
+            />
+            {% endif %}
+          </a>
         </div>
       </div>
       <div class="layout-main-container">{% block content %}{% endblock %}</div>
     </section>
+    <div class="layout-panel" data-panel-id="history">
+      <div class="layout-panel-header">
+        <img
+          src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/arrow-right-d.png') }}"
+          alt=""
+          class="layout-panel-header-hide"
+        />
+        <b>История</b>
+        <img
+          src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/history.png') }}"
+          alt=""
+          class="layout-panel-header-icon"
+          style="height: 30px"
+        />
+      </div>
+      <div class="layout-panel-container">
+        {{ process_panel_list(recent_substances) }}
+      </div>
+    </div>
+    <div class="layout-panel" data-panel-id="likes">
+      <div class="layout-panel-header">
+        <img
+          src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/arrow-right-d.png') }}"
+          alt=""
+          class="layout-panel-header-hide"
+        />
+        <b>Отмеченные</b>
+        <img
+          src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/heart.png') }}"
+          alt=""
+          class="layout-panel-header-icon"
+          style="height: 24px"
+        />
+      </div>
+      <div class="layout-panel-container">
+        {{ process_panel_list(liked_substances) }}
+      </div>
+    </div>
+    <div class="layout-panel" data-panel-id="theme">
+      <div class="layout-panel-header">
+        <img
+          src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/arrow-right-d.png') }}"
+          alt=""
+          class="layout-panel-header-hide"
+        />
+        <b>Тема сайта</b>
+        <img
+          src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/palete.png') }}"
+          alt=""
+          class="layout-panel-header-icon"
+          style="height: 24px"
+        />
+      </div>
+      <div class="layout-panel-container"></div>
+    </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

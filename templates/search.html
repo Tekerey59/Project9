@@ -2,7 +2,7 @@
 %} {% extends 'layouts/main.html' %} {% block content %}
 
 <div class="cards-category">
-  {% if search_cards_pages_count == 0 %}
+  {% if search_substances_pages_count == 0 %}
   <p class="cards-category-header">
     По запросу "{{ request.args.get("q") }}" ничего не найдено
   </p>
@@ -10,7 +10,7 @@
   <p class="cards-category-header">
     По запросу "{{ request.args.get("q") }}" найдено:
   </p>
-  {{ process_cards(search_cards) }} {{ pages_row(search_cards_pages_count) }} {%
+  {{ process_cards(search_substances) }} {{ pages_row(search_substances_pages_count) }} {%
   endif %}
 </div>
 
@@ -21,5 +21,4 @@
 {% if notifications is defined %} {{ process_notification(notifications) }} {%
 endif %}
 
-<script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 {% endblock %}

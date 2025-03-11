@@ -114,7 +114,9 @@
   border-radius: 0 0 10px 10px;
 }
 .layout-header-search-advanced.active {
-  height: 200px;
+  height: max-content;
+  padding: 0 10px 15px 10px;
+  border: 2px solid var(--color-sec-);
 }
 .layout-header-search:not(:has(> .layout-header-search-advanced.active)) {
   transition: var(--transition);
@@ -125,27 +127,24 @@
 }
 .layout-header-search-advanced-tabs {
   overflow: hidden;
-  height: 34px;
-  width: min-content;
-  margin: 10px;
+  height: 40px;
+  width: 100%;
   display: flex;
-  border: 1px solid var(--color-sec);
-  border-radius: 5px;
 }
 .layout-header-search-advanced-tabs-item {
   transition: var(--transition);
   cursor: pointer;
   height: 100%;
+  width: 50%;
   display: flex;
   align-items: center;
+  justify-content: center;
   color: var(--color-sec);
-  padding: 0 10px;
-}
-.layout-header-search-advanced-tabs-item:first-child {
-  border-right: 1px solid var(--color-sec);
+  border-bottom: 2px solid var(--color-sec);
 }
 .layout-header-search-advanced-tabs-item.active {
-  background: var(--color-primary);
+  /* background: var(--color-primary); */
+  border-color: var(--color-primary);
 }
 
 .layout-header-nav {
@@ -181,7 +180,7 @@
 /* ! TODO */
 .layout-main-sidebar {
   height: 100%;
-  width: 64px;
+  width: 74px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -189,22 +188,33 @@
   background: var(--color-extra);
 }
 .layout-main-sidebar > * {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+.layout-main-sidebar-button {
+  transition: var(--transition-fast);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .layout-main-sidebar-button:hover {
-  background: var();
+  width: calc(100% - 4px);
+  margin: 0 4px 0 0;
+  border-left: 4px solid var(--color-sec);
+}
+.layout-main-sidebar-button.active {
+  width: calc(100% - 4px);
+  margin: 0 4px 0 0;
+  border-left: 4px solid var(--color-primary);
 }
 .layout-main-sidebar-top > .layout-main-sidebar-button {
-  margin: 16px 0 0 0;
+  padding: 16px 0;
 }
 .layout-main-sidebar-bottom > .layout-main-sidebar-button {
-  margin: 0 0 16px 0;
-}
-.layout-main-sidebar-button > .layout-main-sidebar-button-img {
-  height: 100%;
-  width: 100%;
+  padding: 16px 0;
 }
 
 .layout-main-container {
@@ -224,6 +234,41 @@
   height: 160px;
   width: 100%;
   background: var(--color-extra);
+}
+
+.layout-panel {
+  transition: var(--transition);
+  position: absolute;
+  top: 80px;
+  right: -500px;
+  height: calc(100% - 80px);
+  width: 500px;
+  padding: 0 10px;
+  background: var(--color-extra);
+  /* border-left: 4px solid var(--color-sec-); */
+}
+.layout-panel.active {
+  right: 0;
+}
+.layout-panel-header {
+  height: 60px;
+  padding: 0 15px 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-sec);
+  color: var(--color-sec);
+}
+.layout-panel-header-hide {
+  height: 32px;
+}
+.layout-panel-header-hide {
+  cursor: pointer;
+}
+.layout-panel-container {
+  overflow: auto;
+  height: calc(100% - 60px);
+  width: 100%;
 }
 
 /* ! TODO */
@@ -318,7 +363,7 @@
   font-style: italic;
   opacity: 0.7;
 }
-.tool-cards-item-img {
+.tool-cards-item-image {
   height: 180px;
   width: 280px;
   border-radius: 8px;
@@ -356,4 +401,53 @@
   cursor: default;
   background: var(--color-primary);
   border: none;
+}
+
+.tool-panel-list {
+  height: 100%;
+  width: 100%;
+}
+.tool-panel-list-item {
+  position: relative;
+  cursor: pointer;
+  font-family: "Poppins", serif;
+  height: 140px;
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  display: flex;
+  border-radius: 10px;
+  background: var(--color-sec-);
+  color: var(--color-sec);
+}
+.tool-panel-list-item-image {
+  height: 120px;
+  width: 186px;
+  border-radius: 10px;
+}
+.tool-panel-list-item-information {
+  width: calc(100% - 196px);
+  margin: 0 0 0 10px;
+}
+.tool-panel-list-item-information-name,
+.tool-panel-list-item-information-extra {
+  word-break: break-all;
+  cursor: text;
+  user-select: text;
+  color: var(--color-sec);
+}
+.tool-panel-list-item-information-name {
+  font-size: 20px;
+}
+.tool-panel-list-item-information-extra {
+  font-style: italic;
+  opacity: 0.7;
+}
+.tool-panel-list-item-like {
+  position: absolute;
+  top: 10px;
+  left: 166px;
+  height: 24px;
+  width: 24px;
+  margin: 5px 0 0 0;
 }
