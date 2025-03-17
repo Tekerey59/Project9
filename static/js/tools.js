@@ -8,12 +8,16 @@ let get_icon = (icon, t = true) => {
     ? `/static/images/ui/${THEME_TYPE}/${icon}.png`
     : `/static/images/ui/${icon}.png`;
 };
-let cards_resize = () => {
-  let blocks = Math.floor(($(".layout-main-container").width() - 40) / 300);
-  $(".cards-category").css(
-    "width",
-    blocks < 4 ? blocks * 300 + (blocks - 1) * 10 : 1240
-  );
+let resize_init = () => {
+  let sections_resize = () => {
+    let blocks = Math.floor(($(".layout-main-container").width() - 40) / 300);
+    $(".cards-category, .tool-notifications").css(
+      "width",
+      blocks < 4 ? blocks * 300 + (blocks - 1) * 10 : 1240
+    );
+  };
+  sections_resize();
+  $(window).on("resize", sections_resize);
 };
 let cards_init = () => {
   $(".tool-cards-item").on("mouseup", (e) => {
@@ -31,8 +35,6 @@ let cards_init = () => {
     }
   });
   $.preloadImages(get_icon("heart-red", false), get_icon("heart-empty", false));
-  $(window).on("resize", cards_resize);
-  cards_resize();
 };
 let panels_lists_init = () => {
   $(document).on("mouseup", ".tool-panel-list-item", (e) => {
@@ -62,7 +64,7 @@ let set_like = (data) => {
   if (data["liked"]) {
     $(`[data-panel-id="likes"] .tool-panel-list`).append(`
       <div class="tool-panel-list-item" data-id="${data["id"]}" data-type="${data["id"]}" data-liked="true">
-        <img class="tool-panel-list-item-image" src="/static/images/structures/${data["id"]}.png" alt="">
+        <img class="tool-panel-list-item-image" src="/static/db/structures/${data["id"]}.png" alt="">
         <img src="/static/images/ui/heart-red.png" alt="" class="tool-panel-list-item-like">
         <div class="tool-panel-list-item-information">
           <div class="tool-panel-list-item-information-name">${data["name"]}</div>
@@ -110,4 +112,9 @@ let likes_init = () => {
       });
     }
   );
+};
+let notifications_init = () => {
+  $(document).on("click", ".tool-notifications-item-remove", (e) => {
+    $(e.currentTarget).parents(".tool-notifications-item").remove();
+  });
 };

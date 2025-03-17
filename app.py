@@ -6,7 +6,7 @@ import hashlib as h
 import json
 
 app = Flask("Suite")
-app.config['SECRET_KEY'] = '^HJb_mTQ]&0kTg8M$Q3xqUMoslBZ_!' # TODO: random bytes
+app.config["SECRET_KEY"] = "^HJb_mTQ]&0kTg8M$Q3xqUMoslBZ_!"  # TODO: random bytes
 
 with sq.connect("base.db", check_same_thread=False) as con:
     cur = con.cursor()
@@ -23,18 +23,18 @@ with sq.connect("base.db", check_same_thread=False) as con:
 
     def ses():
         global session
-        if 'logged' in session:
-            print('\n')
-            print(session['logged'])
-            print('\n')
-            return session['logged']
+        if "logged" in session:
+            print("\n")
+            print(session["logged"])
+            print("\n")
+            return session["logged"]
         else:
-            session['logged'] = False
-            print('\n')
-            print(session['logged'])
-            print('\n')
+            session["logged"] = False
+            print("\n")
+            print(session["logged"])
+            print("\n")
             return False
-    
+
     # * _____________________________________________
     # *
     # *                 CUSTOM
@@ -51,9 +51,18 @@ with sq.connect("base.db", check_same_thread=False) as con:
     def global_variables():
         return {
             "APP_NAME": "ИМЯ_ПРИЛОЖЕНИЯ",
-            "IsMobile": re.match("Android|Mobi|iPhone", request.headers.get("User-Agent")),
+            "IsMobile": re.match(
+                "Android|Mobi|iPhone", request.headers.get("User-Agent")
+            ),
             "THEME": "default",
             "THEME_TYPE": "dark",
+            # "notifications": [
+            #     {
+            #         "class": "success",
+            #         "title": "Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!",
+            #         "text": "Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!Вещество удалено!",
+            #     }
+            # ],
         }
 
     # * _____________________________________________
@@ -70,16 +79,25 @@ with sq.connect("base.db", check_same_thread=False) as con:
     @app.route("/")
     def get_index():
         # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
-        
+
         cur.execute("""SELECT characteristics FROM substances WHERE id == 1""")
         characteristics_data = json.loads(cur.fetchone()[0])
         return render_template(
             "index.html",
             recent_substances=[  #!______________________________________ TODO remove
-                characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, 
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
             ],
             view_substances=[  #!______________________________________ TODO remove
-              characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, characteristics_data, 
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
             ],
             liked_substances=[characteristics_data],
             view_substances_pages_count=10,
@@ -92,21 +110,21 @@ with sq.connect("base.db", check_same_thread=False) as con:
         if ses():
             return redirect("/account/")
         else:
-            return render_template('register.html')
-    
+            return render_template("register.html")
+
     @app.route("/login/")
     def get_login():
         if ses():
             return redirect("/account/")
         else:
-            return render_template('login.html')
+            return render_template("login.html")
 
     @app.route("/account/")
     def get_account():
         if ses():
-            return render_template('account.html')
+            return render_template("account.html")
         else:
-            return redirect('/login/')
+            return redirect("/login/")
 
     @app.route("/account/edit/")
     def get_account_edit():
@@ -138,7 +156,10 @@ with sq.connect("base.db", check_same_thread=False) as con:
         return render_template(
             "search.html",
             search_substances=[
-                characteristics_data, characteristics_data, characteristics_data, characteristics_data
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
+                characteristics_data,
             ],
             search_substances_pages_count=10,
         )
@@ -222,7 +243,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime}', '{updated_datatime}')"""
                 )
                 con.commit()
-                session['logged'] = True
+                session["logged"] = True
                 return render_template("index.html")
             except Exception as err:
                 return render_template("register.html", register_error=0)
@@ -239,14 +260,14 @@ with sq.connect("base.db", check_same_thread=False) as con:
                     f"""SELECT id FROM users WHERE email == '{email1}' AND password == '{password1}'"""
                 )
                 if cur.fetchone() != None:
-                    session['logged'] = True
-                    print('Logged! ')
+                    session["logged"] = True
+                    print("Logged! ")
                     return render_template("index.html")
                 else:
                     return render_template("login.html", login_error=2)
             except:
                 return render_template("login.html", login_error=0)
         else:
-            return render_template('account.html')
+            return render_template("account.html")
 
     app.run(debug=True)

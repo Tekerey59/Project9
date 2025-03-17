@@ -1,14 +1,17 @@
-<!-- ! TODO -->
-{% macro process_notification(items) %} {% for item in items %}
-<div class="tool-notification">
-  <div class="tool-notification-container tool-notification-{{ item.class }}">
-    <h3 class="tool-notification-h tool-notification-h-{{ item.class }}">
+<!-- PROCESS_NOTIFICATIONS -->
+{% macro process_notifications(items) %}
+<div class="tool-notifications">
+  {% for item in items %}
+  <div class="tool-notifications-item tool-notifications-item-{{ item.class }}">
+    <p class="tool-notifications-item-header tool-notifications-item-header-{{ item.class }}">
       {{ item.title }}
-    </h3>
-    <p class="tool-notification-content">{{ item.text }}</p>
+    </p>
+    <p class="tool-notifications-item-content">{{ item.text }}</p>
+    <img src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/x.png') }}" alt="" class="tool-notifications-item-remove">
   </div>
+  {% endfor %} 
 </div>
-{% endfor %} {% endmacro %}
+{% endmacro %}
 <!-- PROCESS_CARDS -->
 {% macro process_cards(items) %}
 <div class="tool-cards">
@@ -22,7 +25,7 @@
     data-liked="{{ item.liked }}"
   >
     <img
-      src="{{ url_for('static', filename='images/structures/'+item.id+'.png') }}"
+      src="{{ url_for('static', filename='db/structures/'+item.id+'.png') }}"
       alt=""
       class="tool-cards-item-image"
     />
@@ -53,7 +56,7 @@
   >
     <img
       class="tool-panel-list-item-image"
-      src="{{ url_for('static', filename='images/structures/'+item.id+'.png') }}"
+      src="{{ url_for('static', filename='db/structures/'+item.id+'.png') }}"
       alt=""
     />
     <img

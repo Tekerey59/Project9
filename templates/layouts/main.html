@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{% from 'other/tools.html' import process_panel_list %}
+{% from 'other/tools.html' import process_panel_list, process_notifications with
+context %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -46,7 +47,7 @@
         </a>
         <div class="layout-header-search">
           <input
-            placeholder="Поиск..."
+            placeholder="Быстрый поиск..."
             type="text"
             class="layout-header-search-input empty-input"
             id="layout-header-search-input"
@@ -158,7 +159,12 @@
           </a>
         </div>
       </div>
-      <div class="layout-main-container">{% block content %}{% endblock %}</div>
+      <div class="layout-main-container">
+        {% if notifications is defined %} {{ process_notification(notifications)
+        }} {% endif %}
+        <!--  -->
+        {% block content %}{% endblock %}
+      </div>
     </section>
     <div class="layout-panel" data-panel-id="history">
       <div class="layout-panel-header">

@@ -1,24 +1,13 @@
-{% from 'other/tools.html' import process_cards, process_notification, pages_row
+{% from 'other/tools.html' import process_cards, pages_row
 %} {% extends 'layouts/main.html' %} {% block content %}
 
 <div class="cards-category">
-  {% if search_substances_pages_count == 0 %}
   <p class="cards-category-header">
-    По запросу "{{ request.args.get("q") }}" ничего не найдено
+    По запросу "{{ request.args.get("q") }}" {% if search_substances_pages_count
+    == 0 %}ничего не найдено{% else %}найдено:{% endif %}
   </p>
-  {% else %}
-  <p class="cards-category-header">
-    По запросу "{{ request.args.get("q") }}" найдено:
-  </p>
-  {{ process_cards(search_substances) }} {{ pages_row(search_substances_pages_count) }} {%
-  endif %}
+  {% if search_substances_pages_count != 0 %} {{
+  process_cards(search_substances) }} {{
+  pages_row(search_substances_pages_count) }} {% endif %}
 </div>
-
-<script>
-  cards_init();
-</script>
-
-{% if notifications is defined %} {{ process_notification(notifications) }} {%
-endif %}
-
 {% endblock %}

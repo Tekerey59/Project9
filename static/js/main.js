@@ -35,5 +35,12 @@ $(".layout-main-sidebar-button[data-panel-id]").on("click", (e) => {
 $(".layout-panel-header-hide").on("click", (e) => {
   $("[data-panel-id]").removeClass("active");
 });
-panels_lists_init();
-likes_init();
+
+// INITIALIZATION
+(() => {
+  cards_init();
+  resize_init();
+  panels_lists_init();
+  likes_init();
+  notifications_init();
+})();
