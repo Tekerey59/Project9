@@ -36,6 +36,12 @@ context %}
       rel="stylesheet"
       href="{{ url_for('static', filename='themes/' ~ THEME ~ '-' ~ THEME_TYPE ~ '.css') }}"
     />
+    {% if IsMobile %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/mobile.css') }}"
+    />
+    {% endif %}
   </head>
 
   <body class="root">
@@ -219,7 +225,9 @@ context %}
           style="height: 24px"
         />
       </div>
-      <div class="layout-panel-container"></div>
+      <div class="layout-panel-container">
+        <!-- ! TODO -->
+      </div>
     </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>

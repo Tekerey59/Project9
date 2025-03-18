@@ -27,6 +27,12 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='themes/' ~ THEME ~ '-' ~ THEME_TYPE ~ '.css') }}"
     />
+    {% if IsMobile %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/login_register_mobile.css') }}"
+    />
+    {% endif %}
   </head>
 
   <body class="root">

@@ -51,8 +51,9 @@ with sq.connect("base.db", check_same_thread=False) as con:
     def global_variables():
         return {
             "APP_NAME": "ИМЯ_ПРИЛОЖЕНИЯ",
-            "IsMobile": re.match(
-                "Android|Mobi|iPhone", request.headers.get("User-Agent")
+            "IsMobile": re.search(
+                "(Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone|Opera Mini)",
+                request.headers.get("User-Agent"),
             ),
             "THEME": "default",
             "THEME_TYPE": "dark",
@@ -270,4 +271,4 @@ with sq.connect("base.db", check_same_thread=False) as con:
         else:
             return render_template("account.html")
 
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=80, debug=True)

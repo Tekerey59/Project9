@@ -1,0 +1,12 @@
+.root {
+  display: block;
+  background: var(--color-extra);
+}
+.layout-main {
+  width: 100%;
+  background: transparent;
+  padding: 35px 20px;
+}
+.layout-main-form {
+  margin-top: 2em;
+}

@@ -13,7 +13,7 @@ let resize_init = () => {
     let blocks = Math.floor(($(".layout-main-container").width() - 40) / 300);
     $(".cards-category, .tool-notifications").css(
       "width",
-      blocks < 4 ? blocks * 300 + (blocks - 1) * 10 : 1240
+      blocks ? (blocks < 4 ? blocks * 300 + (blocks - 1) * 10 : 1240) : 300
     );
   };
   sections_resize();

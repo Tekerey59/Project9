@@ -21,8 +21,8 @@ input[type="password"]:not(:placeholder-shown) {
 
 .layout-main {
   height: max-content;
-  width: 400px;
-  padding: 20px;
+  width: 460px;
+  padding: 35px;
   display: flex;
   flex-direction: column;
   align-items: center;
