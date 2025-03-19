@@ -26,15 +26,9 @@ with sq.connect("base.db", check_same_thread=False) as con:
     def ses():  # TODO
         global session
         if "logged" in session:
-            print("\n")
-            print(session["logged"])
-            print("\n")
             return session["logged"]
         else:
             session["logged"] = False
-            print("\n")
-            print(session["logged"])
-            print("\n")
             return False
 
     def get_likes(t):
@@ -92,7 +86,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
     @app.context_processor
     def global_variables():
         return {
-            "APP_NAME": "ИМЯ_ПРИЛОЖЕНИЯ",
+            "APP_NAME": "Amen",
             "IsMobile": re.search(
                 "(Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone|Opera Mini)",
                 request.headers.get("User-Agent"),
@@ -302,7 +296,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
         name1 = request.form["name"]
         email1 = request.form["email"]
         cur.execute(f"""SELECT id FROM users WHERE email == '{email1}'""")
-        if cur.fetchone == None:
+        if cur.fetchone() == None:
             password_first1 = request.form["password"]
             password_second1 = request.form["password_confirm"]
             if password_first1 == password_second1:
@@ -311,13 +305,14 @@ with sq.connect("base.db", check_same_thread=False) as con:
                 try:
                     psswd_hashed = str(hash(password_second1, email1))
                     cur.execute(
-                        f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime}', '{updated_datatime}')"""
+                        f"""INSERT INTO users (name, email, password, created_datatime, updated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime}', '{updated_datatime}')"""
                     )
                     con.commit()
                     session["logged"] = True
                     session["email"] = email1
                     return render_template("index.html")
                 except Exception as err:
+                    print(err)
                     return render_template("register.html", register_error=0)
             else:
                 return render_template("register.html", register_error=2)
@@ -337,7 +332,6 @@ with sq.connect("base.db", check_same_thread=False) as con:
                 if tmp != None:
                     session["logged"] = True
                     session["email"] = email1
-                    print("Logged! ")
                     return render_template("index.html")
                 else:
                     return render_template("login.html", login_error=2)

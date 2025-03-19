@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS users (
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     password CHAR [128] NOT NULL,
-    created_datetime TEXT NOT NULL,
-    updated_datetime TEXT NOT NULL,
+    created_datatime TEXT NOT NULL,
+    updated_datatime TEXT NOT NULL,
     rights INTEGER NOT NULL DEFAULT 1,
     likes TEXT NOT NULL DEFAULT '[]'
 );
@@ -104,8 +104,8 @@ INSERT INTO users (
         name,
         email,
         password,
-        created_datetime,
-        updated_datetime
+        created_datatime,
+        updated_datatime
     )
 VALUES (
         'Иванов Иван Иванович',
