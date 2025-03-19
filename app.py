@@ -9,6 +9,7 @@ app = Flask("Suite")
 app.config["SECRET_KEY"] = "^HJb_mTQ]&0kTg8M$Q3xqUMoslBZ_!"  # TODO: random bytes
 
 with sq.connect("base.db", check_same_thread=False) as con:
+    con.row_factory = sq.Row
     cur = con.cursor()
     cur.executescript(open("db.sql", "r").read())
     con.commit()
@@ -21,7 +22,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             ).digest()
         ).hexdigest()
 
-    def ses():
+    def ses():  # TODO
         global session
         if "logged" in session:
             print("\n")
@@ -35,17 +36,27 @@ with sq.connect("base.db", check_same_thread=False) as con:
             print("\n")
             return False
 
+    def db_get_substances(sql):
+        cur.execute(sql)
+        return [
+            {
+                **substance,
+                "other_names": json.loads(substance["other_names"]),
+                "characteristics": json.loads(substance["characteristics"]),
+                "sources": json.loads(substance["sources"]),
+                "type": "substance",
+                "liked": "false",  # TODO ? спроси меня потом
+            }
+            for substance in cur.fetchall()
+        ]
+
     # * _____________________________________________
     # *
     # *                 CUSTOM
     # * _____________________________________________
 
-    @app.template_filter("regex_replace")
-    def regex_replace(s, find, replace):
-        return re.sub(find, replace, s)
-
     # Register the filter
-    app.jinja_env.filters["regex_replace"] = regex_replace
+    app.jinja_env.filters["regex_replace"] = re.sub
 
     @app.context_processor
     def global_variables():
@@ -55,6 +66,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
                 "(Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone|Opera Mini)",
                 request.headers.get("User-Agent"),
             ),
+            # "user": {}, # TODO
             "THEME": "default",
             "THEME_TYPE": "dark",
             # "notifications": [
@@ -80,27 +92,39 @@ with sq.connect("base.db", check_same_thread=False) as con:
     @app.route("/")
     def get_index():
         # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
-
-        cur.execute("""SELECT characteristics FROM substances WHERE id == 1""")
-        characteristics_data = json.loads(cur.fetchone()[0])
+        #! TODO ALE
+        #! TODO ALE
+        #! TODO ALE
+        #! TODO ALE
+        #! TODO ALE
+        substance = db_get_substances(f"""SELECT * FROM substances WHERE id == 1""")[0]
         return render_template(
             "index.html",
             recent_substances=[  #!______________________________________ TODO remove
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
             ],
             view_substances=[  #!______________________________________ TODO remove
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
+                substance,
             ],
-            liked_substances=[characteristics_data],
+            liked_substances=[substance],
             view_substances_pages_count=10,
         )
 
@@ -127,48 +151,48 @@ with sq.connect("base.db", check_same_thread=False) as con:
         else:
             return redirect("/login/")
 
-    @app.route("/account/edit/")
+    @app.route("/account/edit/")  # TODO
     def get_account_edit():
         # COMING SOON
         return render_template("acc_ed", err=False)
 
-    @app.route("/account/delete/")
+    @app.route("/account/delete/")  # TODO
     def get_account_delete():
         # COMING SOON
         return render_template("")
 
     # ВЕЩЕСТВА
 
-    @app.route("/<id>/")
+    @app.route("/substance/<id>/")
     def get_chem(id):
-        # COMING SOON
-        return render_template("index.html", id=id)
+        substances = db_get_substances(f"""SELECT * FROM substances WHERE id == {id}""")
+        if len(substances):
+            return render_template(
+                "substance.html",
+                substance=substances[0],
+            )
+        else:
+            render_template("404.html")
 
-    @app.route("/<id>/edit/")
+    @app.route("/substance/<id>/edit/")
     def get_chem_edit(id):
         # COMING SOON
-        return render_template("chem_ed", id, err=False)
+        return render_template("substance.html", id, err=False)
 
-    @app.route("/search/")
+    @app.route("/search/")  # TODO
     def get_search():
-        cur.execute("""SELECT characteristics FROM substances WHERE id == 1""")
-        characteristics_data = json.loads(cur.fetchone()[0])
+        substance = db_get_substances(f"""SELECT * FROM substances WHERE id == 1""")[0]
 
         return render_template(
             "search.html",
             search_substances=[
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
-                characteristics_data,
+                substance,
+                substance,
+                substance,
+                substance,
             ],
             search_substances_pages_count=10,
         )
-
-    @app.route("/like/")
-    def get_like(id):
-        # COMING SOON
-        return render_template()
 
     # * _____________________________________________
     # * _____________________________________________
@@ -182,7 +206,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
     # * _____________________________________________
 
     @app.route("/account/edit/", methods=["POST"])
-    def post_account_edite():
+    def post_account_edite():  # TODO
         # COMING SOON, For example
         t = True
         if t:
@@ -191,7 +215,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             return render_template("acc_ed", err=True)
 
     @app.route("/account/delete", methods=["POST"])
-    def post_account_delete():
+    def post_account_delete():  # TODO
         passwd = True
         if passwd:
             return render_template("testpage.html")
@@ -199,7 +223,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             return render_template("acc")
 
     @app.route("/<id>/edit/", methods=["POST"])
-    def post_chem_edite():
+    def post_chem_edite():  # TODO
         # COMING SOON, For example
         e = True
         if e:
@@ -230,7 +254,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             )
 
     @app.route("/register/", methods=["POST"])
-    def post_register():
+    def post_register():  # TODO
         name1 = request.form["name"]
         email1 = request.form["email"]
         password_first1 = request.form["password"]
@@ -240,8 +264,11 @@ with sq.connect("base.db", check_same_thread=False) as con:
             updated_datatime = created_datatime
             try:
                 psswd_hashed = str(hash(password_second1, email1))
+                print(
+                    f"""INSERT INTO users (name, email, password, created_datetime, updated_datetime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime}', '{updated_datatime}')"""
+                )
                 cur.execute(
-                    f"""INSERT INTO users (name, email, password, created_datetime, upgrated_datatime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime}', '{updated_datatime}')"""
+                    f"""INSERT INTO users (name, email, password, created_datetime, updated_datetime) VALUES ('{name1}', '{email1}', '{psswd_hashed}', '{created_datatime}', '{updated_datatime}')"""
                 )
                 con.commit()
                 session["logged"] = True
@@ -252,7 +279,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             return render_template("register.html", register_error=2)
 
     @app.route("/login/", methods=["POST"])
-    def post_login():
+    def post_login():  # TODO
         if not ses():
             try:
                 email1 = request.form["email"]

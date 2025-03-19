@@ -1,4 +1,85 @@
-{% extends 'layouts/main.html' %}
-{% block content %}
-
+<!-- TODO -->
+{% extends 'layouts/main.html' %} {% block content %}
+<div class="substance-category">
+  <h2>{{ substance["name"] }}</h2>
+  <table class="substance-characteristics-table">
+    <tr>
+      <td colspan="2">
+        <img
+          src="{{ url_for('static', filename='db/structures/' ~ substance['id'] ~ '.png') }}"
+          alt=""
+          class="substance-characteristics-table-header-image"
+        />
+      </td>
+    </tr>
+    <tr class="substance-characteristics-table-header">
+      <td colspan="2"><b>Основное</b></td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td>Названия</td>
+      <td>{{ substance["other_names"] | join(', ') }}</td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td>Систематическое название</td>
+      <td>{{ substance["name_iupac"] }}</td>
+    </tr>
+    <tr class="substance-characteristics-table-header">
+      <td colspan="2"><b>Физические свойства</b></td>
+    </tr>
+    {% for item in substance["characteristics"]["physical"] %}
+    <tr class="substance-characteristics-table-string">
+      <td>{{ item["name"] }}</td>
+      <td>{{ item["value"] }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="substance-characteristics-table-header">
+      <td colspan="2"><b>Химические свойства</b></td>
+    </tr>
+    {% for item in substance["characteristics"]["chemical"] %}
+    <tr class="substance-characteristics-table-string">
+      <td>{{ item["name"] }}</td>
+      <td>{{ item["value"] }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="substance-characteristics-table-header">
+      <td colspan="2"><b>Классификация</b></td>
+    </tr>
+    {% for item in substance["characteristics"]["сlassification"] %}
+    <tr class="substance-characteristics-table-string">
+      <td>{{ item["name"] }}</td>
+      <td>{{ item["value"] }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="substance-characteristics-table-header">
+      <td colspan="2"><b>Безопасность</b></td>
+    </tr>
+    {% for item in substance["characteristics"]["safety"] %}
+    <tr class="substance-characteristics-table-string">
+      <td>{{ item["name"] }}</td>
+      <td>{{ item["value"] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p>{{ substance["description"] }}</p>
+</div>
+<div class="substance-category">
+  <h2>Синтезы</h2>
+  <!-- ENUM -->
+</div>
+<div class="substance-category">
+  <h2>Источники</h2>
+  <ul>
+    {% for link in substance["sources"] %} {% if link | length == 2 %}
+    <li><a href="{{ link[1] }}">{{ link[0] }}</a></li>
+    {% else %}
+    <li><a href="{{ link[0] }}">{{ link[0] }}</a></li>
+    {% endif %} {% endfor %}
+  </ul>
+</div>
+<div class="substance-category">
+  <h2>Прочее</h2>
+  <p>Обновлено: {{ substance["updated_datetime"] }}</p>
+  <p>Добавлено: {{ substance["created_datetime"] }}</p>
+  <p>Автор статьи: {{ substance["author"] }}</p>
+</div>
 {% endblock %}

@@ -27,9 +27,11 @@ _**ТАБЛИЦА substances:**_
 
 - **id** - INT
 - **name** - TEXT
+- **other_names** - JSON list
 - **name_iupac** - TEXT
 - **bruto_formula** - TEXT
 - **characteristics** - JSON (obj)
+- **description** - TEXT
 - **sources** - JSON (list)
 - **author** - INT user id
 - **created_datetime** - TEXT
@@ -145,7 +147,8 @@ _**POST:**_
 ## ШАБЛОНЫ
 
 ### Глобальные переменные:
-- APP_NAME 
+
+- APP_NAME
 - THEME из сессии (без передачи параметра по умолчанию 'default')
 - THEME_TYPE=dark|light из сессии (без передачи параметра по умолчанию 'dark')
 - recent_substances история в-в
@@ -170,7 +173,11 @@ JSON шаблон объекта user:
 
 ```json
 {
-  ""
+  "name": "",
+  "email": "",
+  "rights": 0,
+  "created_datetime": "",
+  "updated_datetime": ""
 }
 ```
 
@@ -191,10 +198,28 @@ JSON шаблон substance элементов списков (пример):
 ```
 
 JSON шаблон notification списка уведомлений (пример):
+
 ```json
 {
-    "class": "info|success|error",
-    "title": "Заголовок",
-    "text": "Сообщение",
+  "class": "info|success|error",
+  "title": "Заголовок",
+  "text": "Сообщение"
 }
+```
+
+JSON **characteristics** (list):
+
+```json
+{
+  "physical": [],
+  "chemical": [],
+  "сlassification": [],
+  "safety": []
+}
+```
+
+JSON **sources** (list):
+
+```json
+[["name", "https://link"], ["https://link"]]
 ```

@@ -11,6 +11,7 @@
 }
 /* END HELPERS */
 
+/** MAIN LAYOUT */
 .layout-header {
   height: 80px;
   width: 100%;
@@ -267,7 +268,41 @@
   width: 100%;
 }
 
-/* ! TODO */
+/** PAGES */
+.substance-category {
+  color: var(--color-sec);
+  width: 100%;
+  max-width: 1240px;
+  padding: 0 20px;
+}
+.substance-category h2 {
+  padding: 0 0 5px 0;
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid var(--color-sec);
+}
+.substance-characteristics-table {
+  clear: right;
+  float: right;
+  font-size: 14px;
+  width: 300px;
+  border-collapse: collapse;
+}
+.substance-characteristics-table td {
+  border: 1px solid white;
+  padding: 8px;
+}
+.substance-characteristics-table-header {
+  padding: 8px 0;
+}
+.substance-characteristics-table-header td {
+  text-align: center;
+}
+.substance-characteristics-table-header-image {
+  height: 200px;
+  width: 300px;
+}
+
+/** TOOLS */
 .tool-notifications {
   display: none;
 }
