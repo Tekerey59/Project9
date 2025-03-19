@@ -273,34 +273,100 @@
   color: var(--color-sec);
   width: 100%;
   max-width: 1240px;
-  padding: 0 20px;
 }
-.substance-category h2 {
+.substance-category-header {
+  color: var(--color-sec);
+  width: 100%;
+  max-width: 1240px;
   padding: 0 0 5px 0;
   margin: 0 0 10px 0;
   border-bottom: 1px solid var(--color-sec);
+}
+.substance-category-header:not(:first-child) {
+  margin: 20px 0 10px 0;
+}
+.substance-category-base {
+  display: flex;
+}
+.substance-category-base-description {
+  width: calc(100% - 350px);
 }
 .substance-characteristics-table {
   clear: right;
   float: right;
   font-size: 14px;
-  width: 300px;
+  width: 340px;
+  height: max-content;
   border-collapse: collapse;
-  margin: 0 0 10px 0;
+  margin: 0 0 0 10px;
 }
 .substance-characteristics-table td {
-  border: 1px solid white;
-  padding: 8px;
+  border: 1px solid var(--color-sec);
 }
-.substance-characteristics-table-header {
-  padding: 8px 0;
+.substance-characteristics-table
+  td:first-child:not(.substance-characteristics-table-string-add) {
+  width: 150px;
+}
+.substance-characteristics-table td > * {
+  margin: 2px;
+  width: calc(100% - 4px);
+}
+.substance-category:not(.editable) .substance-characteristics-table td {
+  padding: 6px;
 }
 .substance-characteristics-table-header td {
   text-align: center;
+  height: 42px;
 }
 .substance-characteristics-table-header-image {
-  height: 200px;
-  width: 300px;
+  height: auto;
+  width: 100%;
+}
+.substance-characteristics-table-string-add {
+  cursor: pointer;
+  text-align: center;
+  height: 30px;
+  background: var(--color-extra);
+}
+.substance-category-sources-item {
+  list-style-type: square;
+  margin: 0 0 0 18px;
+}
+.substance-category-sources-item-link {
+  color: var(--color-primary) !important;
+}
+.substance-category-source-add {
+  margin: 10px 0 0 18px;
+  color: var(--color-sec);
+  height: 40px;
+  width: 150px;
+  background: var(--color-extra);
+  border: 1px solid var(--color-sec);
+  cursor: pointer;
+  border-radius: 5px;
+}
+.substance-editable-text {
+  overflow: hidden;
+  padding: 4px;
+  width: 100%;
+  color: var(--color-sec);
+  resize: none;
+  word-break: break-word;
+  background: transparent;
+  border: 1px dashed var(--color-sec);
+}
+.substance-editable-data {
+  display: none;
+}
+.substance-editable-save {
+  margin: 10px 0 0 0;
+  color: var(--color-sec);
+  padding: 10px 0;
+  width: 150px;
+  background: var(--color-primary);
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 /** TOOLS */

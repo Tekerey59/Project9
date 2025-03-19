@@ -221,5 +221,11 @@ JSON **characteristics** (list):
 JSON **sources** (list):
 
 ```json
-[["name", "https://link"], ["https://link"]]
+["book_name", "https://link"]
+```
+
+JSON syntheses список:
+
+```json
+[1, 2, 3, 4]
 ```

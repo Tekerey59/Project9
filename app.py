@@ -50,8 +50,8 @@ with sq.connect("base.db", check_same_thread=False) as con:
             likes_ids = get_likes(True)
             # Проверка на пустой список
             sql = (
-                f"""SELECT * FROM substances WHERE id IN ({','.join(map(str, likes_ids))})""" 
-                if likes_ids 
+                f"""SELECT * FROM substances WHERE id IN ({','.join(map(str, likes_ids))})"""
+                if likes_ids
                 else """SELECT * FROM substances WHERE 1=0"""
             )
             substances = db_get_substances(sql, liked_ids=set(likes_ids))
@@ -67,10 +67,11 @@ with sq.connect("base.db", check_same_thread=False) as con:
                 "characteristics": json.loads(substance["characteristics"]),
                 "sources": json.loads(substance["sources"]),
                 "type": "substance",
-                "liked": "true" if str(substance["id"]) in liked_ids else "false"
+                "liked": "true" if str(substance["id"]) in liked_ids else "false",
             }
             for substance in cur.fetchall()
         ]
+
     # * _____________________________________________
     # *
     # *                 CUSTOM
@@ -80,8 +81,13 @@ with sq.connect("base.db", check_same_thread=False) as con:
     def regex_replace(s, find, replace):
         return re.sub(find, replace, s)
 
+    @app.template_filter("regex_search")
+    def regex_search(s, find):
+        return re.match(find, s)
+
     # Register the filter
     app.jinja_env.filters["regex_replace"] = regex_replace
+    app.jinja_env.filters["regex_search"] = regex_search
 
     @app.context_processor
     def global_variables():
@@ -102,7 +108,6 @@ with sq.connect("base.db", check_same_thread=False) as con:
             #     }
             # ],
         }
-    
 
     # * _____________________________________________
     # * _____________________________________________
@@ -115,19 +120,18 @@ with sq.connect("base.db", check_same_thread=False) as con:
     # * _____________________________________________
     # * _____________________________________________
 
-
-        # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
-        #! TODO ALE
-        #! TODO ALE
-        #! TODO ALE
-        #! TODO ALE
-        #! TODO ALE
+    # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
+    #! TODO ALE
+    #! TODO ALE
+    #! TODO ALE
+    #! TODO ALE
+    #! TODO ALE
     @app.route("/")
     def get_index():
         liked_ids = set(get_likes(True)) if ses() else set()
         substances = db_get_substances(
             """SELECT * FROM substances WHERE admin_confirmed LIMIT 20""",
-            liked_ids=liked_ids
+            liked_ids=liked_ids,
         )
         substance = substances[0] if substances else None
 
@@ -136,7 +140,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             recent_substances=[substance] * 5 if substance else [],
             view_substances=[substance] * 15 if substance else [],
             liked_substances=get_likes(False),
-            view_substances_pages_count=10
+            view_substances_pages_count=10,
         )
 
     # АККАУНТ
@@ -179,16 +183,20 @@ with sq.connect("base.db", check_same_thread=False) as con:
         substances = db_get_substances(f"""SELECT * FROM substances WHERE id == {id}""")
         if len(substances):
             return render_template(
-                "substance.html",
-                substance=substances[0],
+                "substance.html", substance=substances[0], edit=False
             )
         else:
             render_template("404.html")
 
     @app.route("/substance/<id>/edit/")
     def get_chem_edit(id):
-        # COMING SOON
-        return render_template("substance.html", id, err=False)
+        substances = db_get_substances(f"""SELECT * FROM substances WHERE id == {id}""")
+        if len(substances):
+            return render_template(
+                "substance.html", substance=substances[0], edit=True
+            )
+        else:
+            render_template("404.html")
 
     @app.route("/search/")  # TODO
     def get_search():
@@ -230,15 +238,17 @@ with sq.connect("base.db", check_same_thread=False) as con:
         else:
             likes.append(str(id))
 
-        cur.execute(f"""
+        cur.execute(
+            f"""
             UPDATE users 
             SET likes = '{json.dumps(likes)}' 
             WHERE email = '{user_email}'
-        """)
+        """
+        )
         con.commit()
 
         return get_index()
-    
+
     @app.route("/account/edit/", methods=["POST"])
     def post_account_edite():  # TODO
         # COMING SOON, For example

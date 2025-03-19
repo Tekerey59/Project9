@@ -1,7 +1,136 @@
 <!-- TODO -->
-{% extends 'layouts/main.html' %} {% block content %}
+{% extends 'layouts/main.html' %}
+<!--  -->
+{% block content %}
+<!--  -->
+{% if edit %}
+<script src="{{ url_for('static', filename='js/ckeditor/ckeditor.js') }}"></script>
+
+<h2 class="substance-category-header">
+  <textarea required rows="1" class="substance-editable-text">
+{{ substance['name'] }}</textarea
+  >
+</h2>
+<div class="substance-category substance-category-base editable">
+  <div class="substance-category-base-description">
+    <textarea
+      rows="10"
+      style="float: left"
+      class="substance-editable-text"
+      id="description-editor"
+    >
+{{ substance["description"] }}</textarea
+    >
+  </div>
+  <table class="substance-characteristics-table">
+    <tr>
+      <td colspan="2">
+        <img
+          src="{{ url_for('static', filename='db/structures/' ~ substance['id'] ~ '.png') }}"
+          alt=""
+          class="substance-characteristics-table-header-image"
+        />
+      </td>
+    </tr>
+    <tr class="substance-characteristics-table-header">
+      <td colspan="2"><b>Основное</b></td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td><i>Названия</i></td>
+      <td>
+        <textarea rows="1" class="substance-editable-text">
+{{ substance['other_names'] | join(', ') }}</textarea
+        >
+      </td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td><i>Систематическое название</i></td>
+      <td>
+        <textarea rows="1" class="substance-editable-text">
+{{ substance['name_iupac'] }}</textarea
+        >
+      </td>
+    </tr>
+    {% for characteristics in [["Физические свойства", "physical"],["Химические
+    свойства", "chemical"],["Классификация", "сlassification"],["Безопасность",
+    "safety"]] %}
+    <tr class="substance-characteristics-table-header">
+      <td colspan="2"><b>{{ characteristics[0] }}</b></td>
+    </tr>
+    {% for item in substance["characteristics"][characteristics[1]] %}
+    <tr class="substance-characteristics-table-string deletable">
+      <td>
+        <textarea rows="1" class="substance-editable-text">
+{{ item["name"] }}</textarea
+        >
+      </td>
+      <td>
+        <textarea rows="1" class="substance-editable-text">
+{{ item["vaue"] }}</textarea
+        >
+      </td>
+    </tr>
+    {% endfor %}
+    <tr class="substance-characteristics-table-string">
+      <td colspan="2" class="substance-characteristics-table-string-add">
+        <b>+</b>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+<h2 class="substance-category-header">Синтезы</h2>
 <div class="substance-category">
-  <h2>{{ substance["name"] }}</h2>
+  {% for item in syntheses %}
+  <img
+    src="{{ url_for('static', filename='db/syntheses/' ~ item['id'] ~ '.png') }}"
+    alt=""
+    class="substance-synthesis"
+  />
+  {% endfor %}
+</div>
+<h2 class="substance-category-header">Источники</h2>
+<div class="substance-category">
+  <ul class="substance-category-sources">
+    {% for source in substance["sources"] %}
+    <li class="substance-category-sources-item">
+      <textarea rows="1" class="substance-editable-text">{{ source }}</textarea>
+    </li>
+    {% endfor %}
+  </ul>
+  <button class="substance-category-source-add">+</button>
+</div>
+<form class="substance-editable-data" action="" method="post">
+  <input name="name" type="text" />
+  <input name="other_names" type="text" />
+  <input name="name_iupac" type="text" />
+  <input name="bruto_formula" type="text" />
+  <input name="characteristics" type="text" />
+  <textarea name="description" type="text"></textarea>
+  <input name="sources" type="text" />
+</form>
+<button class="substance-editable-save">Сохранить</button>
+<script>
+  CKEDITOR.replace("description-editor", {
+    skin: "moono-dark",
+    extraPlugins: "autogrow",
+    height: 500,
+    minHeight: 500,
+    autoGrow_minHeight: 500,
+    autoGrow_bottomSpace: 50,
+  });
+  CKEDITOR.addCss(
+    `
+    .cke_editable { background-color: ${
+      THEME_TYPE == "light" ? "#fff" : "#252525"
+    }; color: ${THEME_TYPE == "light" ? "#000" : "#fff"}; }`
+  );
+  editable_substance_init();
+</script>
+{% else %}
+
+<h2 class="substance-category-header">{{ substance["name"] }}</h2>
+<div class="substance-category">
   <table class="substance-characteristics-table">
     <tr>
       <td colspan="2">
@@ -23,63 +152,49 @@
       <td>Систематическое название</td>
       <td>{{ substance["name_iupac"] }}</td>
     </tr>
+    {% for characteristics in [["Физические свойства", "physical"],["Химические
+    свойства", "chemical"],["Классификация", "сlassification"],["Безопасность",
+    "safety"]] %}
     <tr class="substance-characteristics-table-header">
-      <td colspan="2"><b>Физические свойства</b></td>
+      <td colspan="2"><b>{{ characteristics[0] }}</b></td>
     </tr>
-    {% for item in substance["characteristics"]["physical"] %}
+    {% for item in substance["characteristics"][characteristics[1]] %}
     <tr class="substance-characteristics-table-string">
       <td>{{ item["name"] }}</td>
       <td>{{ item["value"] }}</td>
     </tr>
-    {% endfor %}
-    <tr class="substance-characteristics-table-header">
-      <td colspan="2"><b>Химические свойства</b></td>
-    </tr>
-    {% for item in substance["characteristics"]["chemical"] %}
-    <tr class="substance-characteristics-table-string">
-      <td>{{ item["name"] }}</td>
-      <td>{{ item["value"] }}</td>
-    </tr>
-    {% endfor %}
-    <tr class="substance-characteristics-table-header">
-      <td colspan="2"><b>Классификация</b></td>
-    </tr>
-    {% for item in substance["characteristics"]["сlassification"] %}
-    <tr class="substance-characteristics-table-string">
-      <td>{{ item["name"] }}</td>
-      <td>{{ item["value"] }}</td>
-    </tr>
-    {% endfor %}
-    <tr class="substance-characteristics-table-header">
-      <td colspan="2"><b>Безопасность</b></td>
-    </tr>
-    {% for item in substance["characteristics"]["safety"] %}
-    <tr class="substance-characteristics-table-string">
-      <td>{{ item["name"] }}</td>
-      <td>{{ item["value"] }}</td>
-    </tr>
-    {% endfor %}
+    {% endfor %} {% endfor %}
   </table>
   <p>{{ substance["description"] }}</p>
 </div>
+<h2 class="substance-category-header">Синтезы</h2>
 <div class="substance-category">
-  <h2>Синтезы</h2>
-  <!-- ENUM -->
+  {% for item in syntheses %}
+  <img
+    src="{{ url_for('static', filename='db/syntheses/' ~ item['id'] ~ '.png') }}"
+    alt=""
+    class="substance-synthesis"
+  />
+  {% endfor %}
 </div>
+<h2 class="substance-category-header">Источники</h2>
 <div class="substance-category">
-  <h2>Источники</h2>
   <ul>
-    {% for link in substance["sources"] %} {% if link | length == 2 %}
-    <li><a href="{{ link[1] }}">{{ link[0] }}</a></li>
-    {% else %}
-    <li><a href="{{ link[0] }}">{{ link[0] }}</a></li>
-    {% endif %} {% endfor %}
+    {% for source in substance["sources"] %}
+    <li class="substance-category-sources-item">
+      {% if source | regex_search("https?:\/\/") %}
+      <a class="substance-category-sources-item-link" href="{{ source }}"
+        >{{ source }}</a
+      >
+      {% else %} {{ source }} {% endif %}
+    </li>
+    {% endfor %}
   </ul>
 </div>
+<h2 class="substance-category-header">Прочее</h2>
 <div class="substance-category">
-  <h2>Прочее</h2>
   <p>Обновлено: {{ substance["updated_datetime"] }}</p>
   <p>Добавлено: {{ substance["created_datetime"] }}</p>
   <p>Автор статьи: {{ substance["author"] }}</p>
 </div>
-{% endblock %}
+{% endif %} {% endblock %}
