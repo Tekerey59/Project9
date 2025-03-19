@@ -124,27 +124,19 @@ with sq.connect("base.db", check_same_thread=False) as con:
     def get_index():
         liked_ids = set(get_likes(True)) if ses() else set()
         substances = db_get_substances(
-            """SELECT * FROM substances WHERE admin_confirmed LIMIT 20""",
-            liked_ids=liked_ids,
+            """SELECT * FROM substances WHERE admin_confirmed LIMIT 20"""
         )
-        substance = substances[0] if substances else None
-
+        print(substances)
         return render_template(
             "index.html",
-            recent_substances=[substance] * 5 if substance else [],
-            view_substances=[substance] * 15 if substance else [],
+            recent_substances=substances,
+            view_substances=substances,
             liked_substances=get_likes(False),
             view_substances_pages_count=10,
         )
 
     # АККАУНТ
 
-    @app.route("/register/")
-    def get_register():
-        if ses():
-            return redirect("/account/")
-        else:
-            return render_template("register.html")
 
     @app.route("/login/")
     def get_login():
@@ -171,6 +163,19 @@ with sq.connect("base.db", check_same_thread=False) as con:
         return render_template("")
 
     # ВЕЩЕСТВА
+
+    @app.route("/substance/<id>/delete/")
+    def get_delete(id):
+        cur.execute(f"""DELETE FROM substances WHERE id = {id}""")
+        con.commit()
+        return get_index()
+    
+    @app.route("/register/")
+    def get_register():
+        if ses():
+            return redirect("/account/")
+        else:
+            return render_template("register.html")
 
     @app.route("/substance/<id>/")
     def get_chem(id):
