@@ -9,6 +9,204 @@ import os
 app = Flask("Suite")
 app.config["SECRET_KEY"] = os.urandom(24).hex()
 
+def get_db():
+    return sq.connect("base.db", check_same_thread=False)
+
+def db_execute(query, args=()):
+    conn = get_db()
+    conn.row_factory = sq.Row
+    cur = conn.cursor()
+    cur.execute(query, args)
+    conn.commit()
+    return cur
+
+with get_db() as con:
+    con.executescript(open("db.sql", "r").read())
+
+# PASSWORD LOGIN/REGISTER HASH
+def hash(passwd, mail):
+    return h.sha3_512(
+        h.md5(
+            h.sha256(bytes(mail + passwd + "saltedXEXEXEXE", "utf-8")).digest()
+        ).digest()
+    ).hexdigest()
+
+def ses():
+    return session.get("logged", False)
+
+def get_likes(t):
+    if t:
+        if not ses():
+            return []
+        
+        user_email = session.get("email")
+        cur = db_execute("SELECT likes FROM users WHERE email = ?", (user_email,))
+        result = cur.fetchone()
+        return json.loads(result["likes"]) if result else []
+    else:
+        likes_ids = get_likes(True)
+        sql = "SELECT * FROM substances WHERE id IN ({seq})".format(
+            seq=','.join(['?']*len(likes_ids))
+        ) if likes_ids else "SELECT * FROM substances WHERE 1=0"
+        substances = db_get_substances(sql, likes_ids)
+        return substances
+
+def db_get_substances(sql, params=()):
+    cur = db_execute(sql, params)
+    return [
+        {
+            **dict(substance),
+            "other_names": json.loads(substance["other_names"]),
+            "characteristics": json.loads(substance["characteristics"]),
+            "sources": json.loads(substance["sources"]),
+            "type": "substance",
+            "liked": "true" if str(substance["id"]) in get_likes(True) else "false"
+        }
+        for substance in cur.fetchall()
+    ]
+
+@app.template_filter("regex_replace")
+def regex_replace(s, find, replace):
+    return re.sub(find, replace, s)
+
+@app.template_filter("regex_search")
+def regex_search(s, find):
+    return re.match(find, s)
+
+app.jinja_env.filters["regex_replace"] = regex_replace
+app.jinja_env.filters["regex_search"] = regex_search
+
+@app.context_processor
+def global_variables():
+    return {
+        "APP_NAME": "Amen",
+        "IsMobile": re.search(
+            "(Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone|Opera Mini)",
+            request.headers.get("User-Agent"),
+        ),
+        "THEME": "default",
+        "THEME_TYPE": "dark",
+    }
+
+@app.route("/")
+def get_index():
+    substances = db_get_substances("SELECT * FROM substances WHERE admin_confirmed LIMIT 20")
+    return render_template(
+        "index.html",
+        recent_substances=substances,
+        view_substances=substances,
+        liked_substances=get_likes(False),
+        view_substances_pages_count=10,
+    )
+
+@app.route("/register/")
+def get_register():
+    return redirect("/account/") if ses() else render_template("register.html")
+
+@app.route("/login/")
+def get_login():
+    return redirect("/account/") if ses() else render_template("login.html")
+
+@app.route("/account/")
+def get_account():
+    return render_template("account.html") if ses() else redirect("/login/")
+
+@app.route("/substance/<int:id>/delete/")
+def get_delete(id):
+    db_execute("DELETE FROM substances WHERE id = ?", (id,))
+    return redirect("/")
+
+@app.route("/substance/<int:id>/")
+def get_chem(id):
+    substances = db_get_substances("SELECT * FROM substances WHERE id = ?", (id,))
+    return render_template("substance.html", substance=substances[0], edit=False) if substances else render_template("404.html")
+
+@app.route("/substance/<int:id>/edit/")
+def get_chem_edit(id):
+    substances = db_get_substances("SELECT * FROM substances WHERE id = ?", (id,))
+    return render_template("substance.html", substance=substances[0], edit=True) if substances else render_template("404.html")
+
+@app.route("/substance/<int:id>/like", methods=["POST"])
+def toggle_like(id):
+    if not ses():
+        return redirect("/")
+    
+    user_email = session.get("email")
+    cur = db_execute("SELECT likes FROM users WHERE email = ?", (user_email,))
+    likes = json.loads(cur.fetchone()["likes"] or "[]")
+    
+    if str(id) in likes:
+        likes.remove(str(id))
+    else:
+        likes.append(str(id))
+    
+    db_execute("UPDATE users SET likes = ? WHERE email = ?", (json.dumps(likes), user_email))
+    return redirect("/")
+
+@app.route("/register/", methods=["POST"])
+def post_register():
+    name = request.form["name"]
+    email = request.form["email"]
+    password = request.form["password"]
+    
+    cur = db_execute("SELECT id FROM users WHERE email = ?", (email,))
+    if cur.fetchone():
+        return render_template("register.html", register_error=4)
+    
+    if password != request.form["password_confirm"]:
+        return render_template("register.html", register_error=2)
+    
+    try:
+        psswd_hashed = hash(password, email)
+        timestamp = str(time.time())
+        db_execute(
+            "INSERT INTO users (name, email, password, created_datatime, updated_datatime) VALUES (?, ?, ?, ?, ?)",
+            (name, email, psswd_hashed, timestamp, timestamp)
+        )
+        session["logged"] = True
+        session["email"] = email
+        return redirect("/")
+    except Exception:
+        return render_template("register.html", register_error=0)
+
+@app.route("/login/", methods=["POST"])
+def post_login():
+    email = request.form["email"]
+    password = hash(request.form["password"], email)
+    
+    cur = db_execute(
+        "SELECT id FROM users WHERE email = ? AND password = ?", 
+        (email, password)
+    )
+    
+    if cur.fetchone():
+        session["logged"] = True
+        session["email"] = email
+        return redirect("/")
+    return render_template("login.html", login_error=2)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80, debug=True)
+
+
+
+
+
+
+
+
+'''
+from flask import Flask, render_template, redirect, request, session
+import re
+import sqlite3 as sq
+import time
+import hashlib as h
+import json
+import os
+
+app = Flask("Suite")
+app.config["SECRET_KEY"] = os.urandom(24).hex()
+
 with sq.connect("base.db", check_same_thread=False) as con:
     con.row_factory = sq.Row
     cur = con.cursor()
@@ -346,3 +544,4 @@ with sq.connect("base.db", check_same_thread=False) as con:
             return render_template("account.html")
 
     app.run(host="0.0.0.0", port=80, debug=True)
+                                                            '''
