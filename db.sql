@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS users (
     password CHAR [128] NOT NULL,
     created_datetime TEXT NOT NULL,
     updated_datetime TEXT NOT NULL,
-    rights INTEGER NOT NULL DEFAULT 1
+    rights INTEGER NOT NULL DEFAULT 1,
+    likes TEXT NOT NULL DEFAULT '[]'
 );
 CREATE TABLE IF NOT EXISTS substances (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
