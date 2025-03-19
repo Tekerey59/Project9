@@ -37,7 +37,28 @@ with sq.connect("base.db", check_same_thread=False) as con:
             print("\n")
             return False
 
-    def db_get_substances(sql):
+    def get_likes(t):
+        if t:
+            if not ses():
+                return []
+
+            user_email = session["email"]
+            cur.execute(f"""SELECT likes FROM users WHERE email = '{user_email}'""")
+            result = cur.fetchone()
+            return json.loads(result["likes"]) if result else []
+        else:
+            likes_ids = get_likes(True)
+            # Проверка на пустой список
+            sql = (
+                f"""SELECT * FROM substances WHERE id IN ({','.join(map(str, likes_ids))})""" 
+                if likes_ids 
+                else """SELECT * FROM substances WHERE 1=0"""
+            )
+            substances = db_get_substances(sql, liked_ids=set(likes_ids))
+            return substances
+
+    def db_get_substances(sql, liked_ids=None):
+        liked_ids = liked_ids or set()  # Значение по умолчанию
         cur.execute(sql)
         return [
             {
@@ -46,11 +67,10 @@ with sq.connect("base.db", check_same_thread=False) as con:
                 "characteristics": json.loads(substance["characteristics"]),
                 "sources": json.loads(substance["sources"]),
                 "type": "substance",
-                "liked": "false",  # TODO ? спроси меня потом
+                "liked": "true" if str(substance["id"]) in liked_ids else "false"
             }
             for substance in cur.fetchall()
         ]
-
     # * _____________________________________________
     # *
     # *                 CUSTOM
@@ -82,6 +102,7 @@ with sq.connect("base.db", check_same_thread=False) as con:
             #     }
             # ],
         }
+    
 
     # * _____________________________________________
     # * _____________________________________________
@@ -94,45 +115,28 @@ with sq.connect("base.db", check_same_thread=False) as con:
     # * _____________________________________________
     # * _____________________________________________
 
-    @app.route("/")
-    def get_index():
+
         # TODO: view_cards=[{ ... }], view_cards_pages_count, view_cards_current_page, recent_cards=[{ ... }]
         #! TODO ALE
         #! TODO ALE
         #! TODO ALE
         #! TODO ALE
         #! TODO ALE
-        substance = db_get_substances(
-            f"""SELECT * FROM substances WHERE admin_confirmed LIMIT 20"""
-        )[0]
+    @app.route("/")
+    def get_index():
+        liked_ids = set(get_likes(True)) if ses() else set()
+        substances = db_get_substances(
+            """SELECT * FROM substances WHERE admin_confirmed LIMIT 20""",
+            liked_ids=liked_ids
+        )
+        substance = substances[0] if substances else None
+
         return render_template(
             "index.html",
-            recent_substances=[  #!______________________________________ TODO remove
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-            ],
-            view_substances=[  #!______________________________________ TODO remove
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-                substance,
-            ],
-            liked_substances=[substance],
-            view_substances_pages_count=10,
+            recent_substances=[substance] * 5 if substance else [],
+            view_substances=[substance] * 15 if substance else [],
+            liked_substances=get_likes(False),
+            view_substances_pages_count=10
         )
 
     # АККАУНТ
@@ -212,6 +216,29 @@ with sq.connect("base.db", check_same_thread=False) as con:
     # * _____________________________________________
     # * _____________________________________________
 
+    @app.route("/substance/<id>/like", methods=["POST"])
+    def toggle_like(id):
+        if not ses():
+            return get_index()
+
+        user_email = session["email"]
+        cur.execute(f"""SELECT likes FROM users WHERE email = '{user_email}'""")
+        likes = json.loads(cur.fetchone()["likes"])
+
+        if str(id) in likes:
+            likes.remove(str(id))
+        else:
+            likes.append(str(id))
+
+        cur.execute(f"""
+            UPDATE users 
+            SET likes = '{json.dumps(likes)}' 
+            WHERE email = '{user_email}'
+        """)
+        con.commit()
+
+        return get_index()
+    
     @app.route("/account/edit/", methods=["POST"])
     def post_account_edite():  # TODO
         # COMING SOON, For example
