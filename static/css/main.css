@@ -274,13 +274,29 @@
   width: 100%;
   max-width: 1240px;
 }
-.substance-category-header {
+.substance-category-header,
+.substance-category-main-header {
   color: var(--color-sec);
   width: 100%;
   max-width: 1240px;
   padding: 0 0 5px 0;
   margin: 0 0 10px 0;
   border-bottom: 1px solid var(--color-sec);
+}
+.substance-category-main-header {
+  display: flex;
+  justify-content: space-between;
+}
+.substance-category-main-header-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.substance-category-main-header-buttons > * {
+  cursor: pointer;
+}
+.substance-category-main-header-buttons-image {
+  height: 26px;
 }
 .substance-category-header:not(:first-child) {
   margin: 20px 0 10px 0;
@@ -319,6 +335,7 @@
   height: 42px;
 }
 .substance-characteristics-table-header-image {
+  background: #fff;
   height: auto;
   width: 100%;
 }
@@ -337,13 +354,7 @@
 }
 .substance-category-source-add {
   margin: 10px 0 0 18px;
-  color: var(--color-sec);
-  height: 40px;
-  width: 150px;
   background: var(--color-extra);
-  border: 1px solid var(--color-sec);
-  cursor: pointer;
-  border-radius: 5px;
 }
 .substance-editable-text {
   overflow: hidden;
@@ -358,15 +369,25 @@
 .substance-editable-data {
   display: none;
 }
-.substance-editable-save {
-  margin: 10px 0 0 0;
+.substance-category-source-add,
+.substance-editable-save,
+.substance-editable-delete {
   color: var(--color-sec);
   padding: 10px 0;
   width: 150px;
-  background: var(--color-primary);
   border: none;
   cursor: pointer;
   border-radius: 5px;
+}
+.substance-editable-save,
+.substance-editable-delete {
+  margin: 10px 0 0 0;
+}
+.substance-editable-save {
+  background: var(--color-primary);
+}
+.substance-editable-delete {
+  background: #f03737;
 }
 
 /** TOOLS */
@@ -485,6 +506,7 @@
   opacity: 0.7;
 }
 .tool-cards-item-image {
+  background: #fff;
   height: auto;
   width: 280px;
   border-radius: 8px;
@@ -542,8 +564,9 @@
   color: var(--color-sec);
 }
 .tool-panel-list-item-image {
+  background: #fff;
   height: 120px;
-  width: 186px;
+  width: auto;
   border-radius: 10px;
 }
 .tool-panel-list-item-information {

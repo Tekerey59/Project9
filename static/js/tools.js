@@ -124,15 +124,16 @@ jQuery.preloadImages = function () {
   }
 };
 let calculateMolecularMass = (f) => {
-  let els = ELEMENTS.reduce((obj, x) => {obj[x.symbol] = x.atomicMass})
+  let els = {};
+  ELEMENTS.forEach((x) => {
+    els[x.symbol] = x.atomicMass;
+  });
   let match;
   let mass = 0;
   while ((match = /([A-Z][a-z]*)(\d*)/g.exec(f)) !== null) {
-    let element = match[1];
-    let count = parseInt(match[2] || "1", 10);
-
-    if (AM[element]) {
-      mass += els[element] * count;
+    f = f.replace(match[0], "");
+    if (match[1] in els) {
+      mass += els[match[1]] * parseInt(match[2] != "" ? match[2] : 1);
     } else {
       return null;
     }
@@ -188,43 +189,44 @@ let panels_lists_init = () => {
     }
   });
 };
-let set_like = (data) => {
-  let element = $(
-    `.tool-cards-item[data-id="${data["id"]}"] > .tool-cards-item-like, .tool-panel-list-item[data-id="${data["id"]}"] > .tool-panel-list-item-like`
-  );
-  if (data["liked"]) {
-    element.attr("src", get_icon("heart-red", false));
-  } else {
-    element.attr("src", get_icon("heart-empty", false));
-  }
-  if (data["liked"]) {
-    $(`[data-panel-id="likes"] .tool-panel-list`).append(`
-      <div class="tool-panel-list-item" data-id="${data["id"]}" data-type="${data["id"]}" data-liked="true">
-        <img class="tool-panel-list-item-image" src="/static/db/structures/${data["id"]}.png" alt="">
-        <img src="/static/images/ui/heart-red.png" alt="" class="tool-panel-list-item-like">
-        <div class="tool-panel-list-item-information">
-          <div class="tool-panel-list-item-information-name">${data["name"]}</div>
-          <div class="tool-panel-list-item-information-extra">${data["name_iupac"]}</div>
+let likes_init = () => {
+  let set_like = (data, visual = true) => {
+    let element = $(
+      `.tool-cards-item[data-id="${data["id"]}"] > .tool-cards-item-like, .tool-panel-list-item[data-id="${data["id"]}"] > .tool-panel-list-item-like`
+    );
+    if (data["liked"]) {
+      element.attr("src", get_icon("heart-red", false));
+    } else {
+      element.attr("src", get_icon("heart-empty", false));
+    }
+    if (data["liked"]) {
+      $(`[data-panel-id="likes"] .tool-panel-list`).append(`
+        <div class="tool-panel-list-item" data-id="${data["id"]}" data-type="${data["id"]}" data-liked="true">
+          <img class="tool-panel-list-item-image" src="/static/db/structures/${data["id"]}.png" alt="">
+          <img src="/static/images/ui/heart-red.png" alt="" class="tool-panel-list-item-like">
+          <div class="tool-panel-list-item-information">
+            <div class="tool-panel-list-item-information-name">${data["name"]}</div>
+            <div class="tool-panel-list-item-information-extra">${data["name_iupac"]}</div>
+          </div>
         </div>
-      </div>
-      `);
-  } else {
-    $(`[data-panel-id="likes"] .tool-panel-list`).html(
-      $.parseHTML($(`[data-panel-id="likes"] .tool-panel-list`).html()).filter(
-        (el) =>
+        `);
+    } else {
+      $(`[data-panel-id="likes"] .tool-panel-list`).html(
+        $.parseHTML(
+          $(`[data-panel-id="likes"] .tool-panel-list`).html()
+        ).filter((el) =>
           el.attributes
             ? el.attributes["data-id"].value != data["id"] &&
               el.attributes["data-type"].value != data["type"]
             : false
-      )
-    );
-  }
+        )
+      );
+    }
 
-  $(
-    `.tool-cards-item[data-id="${data["id"]}"], .tool-panel-list-item[data-id="${data["id"]}"]`
-  ).data("liked", data["liked"]);
-};
-let likes_init = () => {
+    $(
+      `.tool-cards-item[data-id="${data["id"]}"], .tool-panel-list-item[data-id="${data["id"]}"]`
+    ).data("liked", data["liked"]);
+  };
   $(document).on(
     "click",
     ".tool-panel-list-item-like, .tool-cards-item-like",
@@ -243,7 +245,6 @@ let likes_init = () => {
         url: `/${data["type"]}/${data["id"]}/like`,
         method: "post",
         dataType: "json",
-        data: { liked: data["liked"] },
         success: set_like,
       });
     }
@@ -263,6 +264,21 @@ let editable_substance_init = () => {
       $(element).css("height", element.scrollHeight);
     });
   };
+  CKEDITOR.replace("description-editor", {
+    skin: "moono-dark",
+    extraPlugins: "autogrow",
+    height: 500,
+    minHeight: 500,
+    autoGrow_minHeight: 500,
+    autoGrow_bottomSpace: 50,
+  });
+  CKEDITOR.addCss(
+    `
+    .cke_editable { background-color: ${
+      THEME_TYPE == "light" ? "#fff" : "#252525"
+    }; color: ${THEME_TYPE == "light" ? "#000" : "#fff"}; }`
+  );
+
   $(document).on("input resize", ".substance-editable-text", (e) => {
     $(e.currentTarget).css("height", "min-content");
     $(e.currentTarget).css("height", $(e.currentTarget).get(0).scrollHeight);
@@ -281,15 +297,22 @@ let editable_substance_init = () => {
       }
     }
   );
+  $("[data-bruto_formula]").on("input", (e) => {
+    let mass = calculateMolecularMass($(e.currentTarget).val());
+
+    $("[data-mass]").attr("data-mass", mass ? mass + " г / моль" : 0);
+    $("[data-mass]").text(mass ? mass + " г / моль" : "!!!");
+  });
   $(".substance-characteristics-table-string-add").on("click", (e) => {
+    let type = $(e.currentTarget).attr("data-characteristics");
     $(e.currentTarget).parents(".substance-characteristics-table-string")
       .before(`
-    <tr class="substance-characteristics-table-string deletable">
+    <tr data-characteristics="${type}" class="substance-characteristics-table-string deletable">
       <td>
-        <textarea rows="1" class="substance-editable-text"  placeholder="DEL - удалить строку"></textarea>
+        <textarea data-characteristics-name rows="1" class="substance-editable-text"  placeholder="DEL - удалить строку"></textarea>
       </td>
       <td>
-        <textarea rows="1" class="substance-editable-text" placeholder="DEL - удалить строку"></textarea>
+        <textarea data-characteristics-value rows="1" class="substance-editable-text" placeholder="DEL - удалить строку"></textarea>
       </td>
     </tr>
       `);
@@ -300,6 +323,7 @@ let editable_substance_init = () => {
         <textarea rows="1" class="substance-editable-text" placeholder="DEL, чтобы удалить пустое поле"></textarea>
       </li>
       `);
+    $(".substance-category-sources-item:last-child").focus();
   });
   $(document).on(
     "keyup",
@@ -311,6 +335,93 @@ let editable_substance_init = () => {
     }
   );
   $(".substance-editable-save").on("click", () => {
+    $("[name='name']").val($("[data-name]").val());
+    $("[name='other_names']").val($("[data-other_names]").val());
+    $("[name='name_iupac']").val($("[data-name_iupac]").val());
+    $("[name='bruto_formula']").val($("[data-bruto_formula]").val());
+    $("[name='mass']").val($("[data-mass]").attr("data-mass"));
+    $("[name='characteristics']").val(
+      JSON.stringify({
+        physical: $(
+          "[data-characteristics='physical']:not(.substance-characteristics-table-string-add)"
+        )
+          .get()
+          .map((x) => ({
+            name: $(x).find("[data-characteristics-name]").val(),
+            value: $(x).find("[data-characteristics-value]").val(),
+          })),
+        chemical: $(
+          "[data-characteristics='chemical']:not(.substance-characteristics-table-string-add)"
+        )
+          .get()
+          .map((x) => ({
+            name: $(x).find("[data-characteristics-name]").val(),
+            value: $(x).find("[data-characteristics-value]").val(),
+          })),
+        сlassification: $(
+          "[data-characteristics='сlassification']:not(.substance-characteristics-table-string-add)"
+        )
+          .get()
+          .map((x) => ({
+            name: $(x).find("[data-characteristics-name]").val(),
+            value: $(x).find("[data-characteristics-value]").val(),
+          })),
+        safety: $(
+          "[data-characteristics='safety']:not(.substance-characteristics-table-string-add)"
+        )
+          .get()
+          .map((x) => ({
+            name: $(x).find("[data-characteristics-name]").val(),
+            value: $(x).find("[data-characteristics-value]").val(),
+          })),
+      })
+    );
+    $("[name='description']").val(
+      CKEDITOR.instances["description-editor"].getData()
+    );
+    $("[name='sources']").val(
+      JSON.stringify(
+        $(`.substance-category-sources-item > .substance-editable-text`)
+          .get()
+          .map((x) => x.value)
+      )
+    );
     $(".substance-editable-data").submit();
+  });
+  $(".substance-editable-delete").on("click", () => {
+    if (
+      confirm("Вы действительно хотите удалить это вещество из базы данных?")
+    ) {
+      location.href = location.href.replace("/edit/", "/delete/");
+    }
+  });
+};
+let substance_init = () => {
+  let set_like = (data) => {
+    $(".substance-category-main-header-buttons-like").attr(
+      "data-liked",
+      data["liked"]
+    );
+    if (data["liked"]) {
+      $(".substance-category-main-header-buttons-like").attr(
+        "src",
+        get_icon("heart-red", false)
+      );
+    } else {
+      $(".substance-category-main-header-buttons-like").attr(
+        "src",
+        get_icon("heart-empty")
+      );
+    }
+  };
+  $(".substance-category-main-header-buttons-like").on("click", (e) => {
+    new_state = $(e.currentTarget).attr("data-liked") != "true";
+    set_like({ liked: new_state });
+    $.ajax({
+      url: `./like`,
+      method: "post",
+      dataType: "json",
+      success: set_like,
+    });
   });
 };

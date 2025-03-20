@@ -7,7 +7,7 @@
 <script src="{{ url_for('static', filename='js/ckeditor/ckeditor.js') }}"></script>
 
 <h2 class="substance-category-header">
-  <textarea required rows="1" class="substance-editable-text">
+  <textarea data-name required rows="1" class="substance-editable-text">
 {{ substance['name'] }}</textarea
   >
 </h2>
@@ -38,7 +38,7 @@
     <tr class="substance-characteristics-table-string">
       <td><i>Названия</i></td>
       <td>
-        <textarea rows="1" class="substance-editable-text">
+        <textarea data-other_names rows="1" class="substance-editable-text">
 {{ substance['other_names'] | join(', ') }}</textarea
         >
       </td>
@@ -46,9 +46,25 @@
     <tr class="substance-characteristics-table-string">
       <td><i>Систематическое название</i></td>
       <td>
-        <textarea rows="1" class="substance-editable-text">
+        <textarea data-name_iupac rows="1" class="substance-editable-text">
 {{ substance['name_iupac'] }}</textarea
         >
+      </td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td><i>Формула</i></td>
+      <td>
+        <textarea data-bruto_formula rows="1" class="substance-editable-text">
+{{ substance['bruto_formula'] }}</textarea
+        >
+      </td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td><i>Масса</i></td>
+      <td>
+        <p data-mass="{{ substance['mass'] }}" rows="1">
+          {{ substance['mass'] }} г / моль
+        </p>
       </td>
     </tr>
     {% for characteristics in [["Физические свойства", "physical"],["Химические
@@ -58,21 +74,36 @@
       <td colspan="2"><b>{{ characteristics[0] }}</b></td>
     </tr>
     {% for item in substance["characteristics"][characteristics[1]] %}
-    <tr class="substance-characteristics-table-string deletable">
+    <tr
+      data-characteristics="{{ characteristics[1] }}"
+      class="substance-characteristics-table-string deletable"
+    >
       <td>
-        <textarea rows="1" class="substance-editable-text">
+        <textarea
+          data-characteristics-name
+          rows="1"
+          class="substance-editable-text"
+        >
 {{ item["name"] }}</textarea
         >
       </td>
       <td>
-        <textarea rows="1" class="substance-editable-text">
-{{ item["vaue"] }}</textarea
+        <textarea
+          data-characteristics-value
+          rows="1"
+          class="substance-editable-text"
+        >
+{{ item["value"] }}</textarea
         >
       </td>
     </tr>
     {% endfor %}
     <tr class="substance-characteristics-table-string">
-      <td colspan="2" class="substance-characteristics-table-string-add">
+      <td
+        colspan="2"
+        class="substance-characteristics-table-string-add"
+        data-characteristics="{{ characteristics[1] }}"
+      >
         <b>+</b>
       </td>
     </tr>
@@ -105,31 +136,37 @@
   <input name="other_names" type="text" />
   <input name="name_iupac" type="text" />
   <input name="bruto_formula" type="text" />
+  <input name="mass" type="text" />
   <input name="characteristics" type="text" />
   <textarea name="description" type="text"></textarea>
   <input name="sources" type="text" />
 </form>
 <button class="substance-editable-save">Сохранить</button>
+<button class="substance-editable-delete">удалить</button>
 <script>
-  CKEDITOR.replace("description-editor", {
-    skin: "moono-dark",
-    extraPlugins: "autogrow",
-    height: 500,
-    minHeight: 500,
-    autoGrow_minHeight: 500,
-    autoGrow_bottomSpace: 50,
-  });
-  CKEDITOR.addCss(
-    `
-    .cke_editable { background-color: ${
-      THEME_TYPE == "light" ? "#fff" : "#252525"
-    }; color: ${THEME_TYPE == "light" ? "#000" : "#fff"}; }`
-  );
   editable_substance_init();
 </script>
 {% else %}
 
-<h2 class="substance-category-header">{{ substance["name"] }}</h2>
+<div class="substance-category-main-header">
+  <h2 class="">{{ substance["name"] }}</h2>
+  <div class="substance-category-main-header-buttons">
+    <img
+      data-liked="{{ substance['liked'] }}"
+      src="{{ url_for('static', filename='images/ui/' + THEME_TYPE + '/' + ('heart-red.png' if substance['liked'] == 'true' else 'heart-empty.png')) }}"
+      alt=""
+      class="substance-category-main-header-buttons-image substance-category-main-header-buttons-like"
+      style="height: 28px; margin-right: 20px"
+    />
+    <a href="./edit"
+      ><img
+        src="{{ url_for('static', filename='images/ui/' ~ THEME_TYPE ~ '/pencil.png') }}"
+        alt=""
+        class="substance-category-main-header-buttons-image"
+        style="height: 26px"
+    /></a>
+  </div>
+</div>
 <div class="substance-category">
   <table class="substance-characteristics-table">
     <tr>
@@ -151,6 +188,14 @@
     <tr class="substance-characteristics-table-string">
       <td>Систематическое название</td>
       <td>{{ substance["name_iupac"] }}</td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td>Формула</td>
+      <td>{{ substance["bruto_formula"] }}</td>
+    </tr>
+    <tr class="substance-characteristics-table-string">
+      <td>Масса</td>
+      <td>{{ substance["mass"] }} г / моль</td>
     </tr>
     {% for characteristics in [["Физические свойства", "physical"],["Химические
     свойства", "chemical"],["Классификация", "сlassification"],["Безопасность",
@@ -197,4 +242,7 @@
   <p>Добавлено: {{ substance["created_datetime"] }}</p>
   <p>Автор статьи: {{ substance["author"] }}</p>
 </div>
+<script>
+  substance_init();
+</script>
 {% endif %} {% endblock %}
